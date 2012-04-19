@@ -43,8 +43,12 @@ void sensorsTest()
     getGyroscopeData(gyro);
 
     printf("Sensors Test begin: \n");
-     printf("%d, %d, %d, %d, %d, %d, %d",    \
+    while(SerialUSB.available())
+    {
+        printf("%d, %d, %d, %d, %d, %d, %d",    \
             acc[0], acc[1], acc[2], gyro[0], gyro[1], gyro[2], gyro[3]);  
+        delay(100);
+    }
   
     SerialUSB.println(); //回车
     delay(100);

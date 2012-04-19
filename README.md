@@ -1,7 +1,9 @@
 OpenDrone - FlyMaple
 ====================
 
-FlyMaple is the hardware board of opendrone quadcopter, forked from Maple Project.
+FlyMaple is another Quadcopter, based on Maple board, All Open Source.
 
 Hardware designed by Zhuang Ming Bo, via KiCAD
+
+Code Contributor: Zhuang Ming Bo, Tong Hui
 
