@@ -44,7 +44,7 @@ unsigned long simple_strtoul(const char *cp,char **endp,unsigned int base);
 
 char *itox(unsigned int num);
 
-int printf(const char *format, ...);
+//int printf(const char *format, ...);
 
 char *puts(const char *s);
 

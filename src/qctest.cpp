@@ -16,6 +16,8 @@
 #include "ITG3205.h"
 #include "BMP085.h"
 
+char str[512];
+
 /** 
  * Sensors Test
  *
@@ -26,9 +28,8 @@ void sensorsTest()
 {
     int16 acc[3];
     int16 gyro[4];
-
-    char *str;
-
+    int16 i = 0, j = 0;
+    
     SerialUSB.println("\n\rSensors Testing...");
     //Put Sensors Test Codes Here
     SerialUSB.println();
@@ -36,24 +37,36 @@ void sensorsTest()
     SerialUSB.println("(p) Pressure & Temperature Test");
     SerialUSB.println("(c) Compass Test");
 
-    gets(str);
-    puts(str);
+   puts("Sensors Test begin: \r\n\n");
 
-    getAccelerometerData(acc);
-    getGyroscopeData(gyro);
-
-    printf("Sensors Test begin: \n");
-    while(SerialUSB.available())
+    while(1)
     {
-        printf("%d, %d, %d, %d, %d, %d, %d",    \
-            acc[0], acc[1], acc[2], gyro[0], gyro[1], gyro[2], gyro[3]);  
+         getAccelerometerData(acc);
+         getGyroscopeData(gyro);
+        
+        for(i = 0; i < 3; i++)
+        {
+            SerialUSB.print(acc[i]);
+            SerialUSB.print("\t");
+        }
+
+        for(j = 0; j < 4; j++)
+        {
+            SerialUSB.print(gyro[i]);
+            SerialUSB.print("\t");
+        }
+
         delay(100);
+        
+        SerialUSB.println();
     }
-  
-    SerialUSB.println(); //回车
+    
+
+
+            //sprintf(str, "%d, %d, %d, %d, %d, %d, %d", acc[0], acc[1], acc[2], gyro[0], gyro[1], gyro[2], gyro[3]);  
+
     delay(100);
   //延时50毫秒
-
     return;
 }
 

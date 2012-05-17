@@ -1,5 +1,5 @@
 /**
- * @file   misc.cpp
+ * @file   misc.cpp`
  * @author tonghuix <tonghuix@tonghuix-Studio-1450>
  * @date   Fri Apr 13 18:29:54 2012
  * 
@@ -57,7 +57,6 @@ void readFrom(uint8 DEVICE, uint8 address, uint8 num, uint8 *msg_data) {
   msgs[0].data = msg_data;
   i2c_master_xfer(I2C1, msgs, 1,0);
 }
-
 
 int putchar(char c)
 {
@@ -212,7 +211,7 @@ void output_int( unsigned int num, const int base )
     }
 }
 
-
+#if 0
  
 int printf(const char *format, ...)
 {
@@ -262,7 +261,9 @@ int printf(const char *format, ...)
 
 	return 0;
 }
- 
+
+#endif
+
 char *puts(const char *s)
 {
     char *no_standard_return =(char*) s;
@@ -300,4 +301,4 @@ char *gets(char *s)
     *(s-1) = '\0';
     return s;
 }
- 
+
