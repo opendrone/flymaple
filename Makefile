@@ -31,6 +31,7 @@ SRCS=	ADXL345.cpp \
 		ITG3205.cpp \
 		qctest.cpp  \
 		misc.cpp	\
+		motor.cpp	\
 		main.cpp    
 
 #SRCS = $(wildcard *.cpp) 

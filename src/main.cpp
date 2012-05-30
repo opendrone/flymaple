@@ -16,6 +16,7 @@
 #include "ITG3205.h"
 #include "ADXL345.h"
 #include "BMP085.h"
+#include "motor.h"
 
 #define BS '\b'
 
@@ -42,6 +43,7 @@ void setup()
     Serial2.begin(9600);
     Serial2.println("Hello world!");
 
+    motorInit();//电机控制初始化 
     i2c_master_enable(I2C1, 0);
     initAcc();  
     initGyro();

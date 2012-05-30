@@ -15,6 +15,7 @@
 #include "ADXL345.h"
 #include "ITG3205.h"
 #include "BMP085.h"
+#include "motor.h"
 
 char str[512];
 
@@ -39,7 +40,7 @@ void sensorsTest()
 
    puts("Sensors Test begin: \r\n\n");
 
-    while(1)
+   while(!SerialUSB.available())
     {
          getAccelerometerData(acc);
          getGyroscopeData(gyro);
@@ -61,10 +62,6 @@ void sensorsTest()
         SerialUSB.println();
     }
     
-
-
-            //sprintf(str, "%d, %d, %d, %d, %d, %d, %d", acc[0], acc[1], acc[2], gyro[0], gyro[1], gyro[2], gyro[3]);  
-
     delay(100);
   //延时50毫秒
     return;
@@ -78,8 +75,80 @@ void sensorsTest()
  */
 void motorsTest()
 {
+    unsigned long pMills = millis();
+    int interal = 1000;
+    unsigned long curMills = 0;
+
+    char tch;
+    int val = 2;
+
     SerialUSB.println("\n\rMotors Testing...");
-    //Put Motors Test Code Here
+
+    motorStop(); //stop the motor for init
+    SerialUSB.println("Motor Stoped.");
+    
+    while(!SerialUSB.available())
+    {
+        curMills = millis();
+        switch(curMills - pMills)
+        {
+        case 1000: {SerialUSB.println("Motor Rolling Half..."); motorHalf();break;}
+        case 6000: {SerialUSB.println("Motor Customs...");  motorCustom(200, 300, 500, 800); break;}
+        case 14000: pMills = curMills; break;
+            default: break;
+        }
+    }
+
+    motorStop();
+    delay(1000);
+    
+    SerialUSB.println("Press j for increace Motor, press K for motor Decrease.");
+    
+    while(1)
+    {
+        tch = SerialUSB.read();
+        
+        if(val > 1 && val < 999){
+            if(tch = 'j')  val = val + 100;
+            if(tch = 'k')  val = val - 100;
+            motorCustom(val, val, val, val);
+            SerialUSB.println(val);
+        }
+        else
+            motorStop();
+    }
+    
+
+    
+    
+        
+        /*p
+        SerialUSB.println("Motor Stoped.");
+        curMills = millis();
+        interal = 1000;
+        if(curMills - pMills > interal)
+        {
+            motorStop();
+        }
+
+        SerialUSB.println("Motor Rolling Half...");
+        pMills = curMills;
+        curMills = millis();
+        if(curMills - pMills > 5000)
+        {
+            motorHalf();
+        }
+
+        SerialUSB.println("Motor Customes 200,300,500,800....");
+        pMills = curMills;
+        curMills = millis();
+        if(curMills - pMills > 8000)
+        {
+           
+        }
+        */
+
+    
     return;
 }
 
