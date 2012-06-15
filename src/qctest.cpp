@@ -48,18 +48,23 @@ void sensorsTest()
         for(i = 0; i < 3; i++)
         {
             SerialUSB.print(acc[i]);
+            Serial2.print(acc[i]);
             SerialUSB.print("\t");
+            Serial2.print("|");
         }
 
         for(j = 0; j < 4; j++)
         {
             SerialUSB.print(gyro[i]);
+            Serial2.print(gyro[i]);
+            Serial2.print("|");
             SerialUSB.print("\t");
         }
 
         delay(100);
         
         SerialUSB.println();
+        Serial2.print(";");
     }
     
     delay(100);
@@ -108,47 +113,24 @@ void motorsTest()
     {
         tch = SerialUSB.read();
         
-        if(val > 1 && val < 999){
-            if(tch = 'j')  val = val + 100;
-            if(tch = 'k')  val = val - 100;
-            motorCustom(val, val, val, val);
-            SerialUSB.println(val);
+        if(val > 1 && val <= 999){
+            switch(tch)
+            {
+                case 'j': val = val + 50;break;
+                case 'k': val = val - 50;break;
+                    //default: motorStop(); val = 0; break;
+            }
+ 
         }
-        else
-            motorStop();
-    }
-    
+        else if(val > 999) val = 999;
+        else if(val <= 1) val = 2;
 
-    
-    
+        motorCustom(val, val, val, val);
+        delay(100);
         
-        /*p
-        SerialUSB.println("Motor Stoped.");
-        curMills = millis();
-        interal = 1000;
-        if(curMills - pMills > interal)
-        {
-            motorStop();
-        }
-
-        SerialUSB.println("Motor Rolling Half...");
-        pMills = curMills;
-        curMills = millis();
-        if(curMills - pMills > 5000)
-        {
-            motorHalf();
-        }
-
-        SerialUSB.println("Motor Customes 200,300,500,800....");
-        pMills = curMills;
-        curMills = millis();
-        if(curMills - pMills > 8000)
-        {
-           
-        }
-        */
-
-    
+        SerialUSB.println(val);
+    }
+        
     return;
 }
 

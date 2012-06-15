@@ -101,7 +101,7 @@ void loop()
          /* clear screen for standard PTY terminal  "\033[1H\033[2J " */
         SerialUSB.println("\33[2J");
         
-        SerialUSB.println("\n\r >> OpenDrone Flymaple 1.0 << ");
+        SerialUSB.println("\n\r >> OpenDrone Flymaple 1.1 << ");
         SerialUSB.println("---------------------------------");
         SerialUSB.println("(s) Sensors Test");
         SerialUSB.println("(m) Motors Test");
