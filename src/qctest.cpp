@@ -15,6 +15,7 @@
 #include "ADXL345.h"
 #include "ITG3205.h"
 #include "BMP085.h"
+#include "motor.h"
 
 char str[512];
 
@@ -47,20 +48,27 @@ void sensorsTest()
         for(i = 0; i < 3; i++)
         {
             SerialUSB.print(acc[i]);
+            Serial2.print(acc[i]);
             SerialUSB.print("\t");
+            Serial2.print("|");
         }
 
         for(j = 0; j < 4; j++)
         {
             SerialUSB.print(gyro[i]);
+            Serial2.print(gyro[i]);
+            Serial2.print("|");
             SerialUSB.print("\t");
         }
 
         delay(100);
         
         SerialUSB.println();
+        Serial2.print(";");
     }
     
+    delay(100);
+  //延时50毫秒
     return;
 }
 
@@ -72,8 +80,57 @@ void sensorsTest()
  */
 void motorsTest()
 {
+    unsigned long pMills = millis();
+    int interal = 1000;
+    unsigned long curMills = 0;
+
+    char tch;
+    int val = 2;
+
     SerialUSB.println("\n\rMotors Testing...");
-    //Put Motors Test Code Here
+
+    motorStop(); //stop the motor for init
+    SerialUSB.println("Motor Stoped.");
+    
+    while(!SerialUSB.available())
+    {
+        curMills = millis();
+        switch(curMills - pMills)
+        {
+        case 1000: {SerialUSB.println("Motor Rolling Half..."); motorHalf();break;}
+        case 6000: {SerialUSB.println("Motor Customs...");  motorCustom(200, 300, 500, 800); break;}
+        case 14000: pMills = curMills; break;
+            default: break;
+        }
+    }
+
+    motorStop();
+    delay(1000);
+    
+    SerialUSB.println("Press j for increace Motor, press K for motor Decrease.");
+    
+    while(1)
+    {
+        tch = SerialUSB.read();
+        
+        if(val > 1 && val <= 999){
+            switch(tch)
+            {
+                case 'j': val = val + 50;break;
+                case 'k': val = val - 50;break;
+                    //default: motorStop(); val = 0; break;
+            }
+ 
+        }
+        else if(val > 999) val = 999;
+        else if(val <= 1) val = 2;
+
+        motorCustom(val, val, val, val);
+        delay(100);
+        
+        SerialUSB.println(val);
+    }
+        
     return;
 }
 
