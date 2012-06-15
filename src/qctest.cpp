@@ -39,7 +39,7 @@ void sensorsTest()
 
    puts("Sensors Test begin: \r\n\n");
 
-    while(1)
+   while(!SerialUSB.available())
     {
          getAccelerometerData(acc);
          getGyroscopeData(gyro);
@@ -61,12 +61,6 @@ void sensorsTest()
         SerialUSB.println();
     }
     
-
-
-            //sprintf(str, "%d, %d, %d, %d, %d, %d, %d", acc[0], acc[1], acc[2], gyro[0], gyro[1], gyro[2], gyro[3]);  
-
-    delay(100);
-  //延时50毫秒
     return;
 }
 
