@@ -112,22 +112,31 @@ void motorsTest()
     while(1)
     {
         tch = SerialUSB.read();
-        
-        if(val > 1 && val <= 999){
-            switch(tch)
-            {
-                case 'j': val = val + 50;break;
-                case 'k': val = val - 50;break;
-                    //default: motorStop(); val = 0; break;
-            }
- 
-        }
-        else if(val > 999) val = 999;
-        else if(val <= 1) val = 2;
 
-        motorCustom(val, val, val, val);
-        delay(100);
+        switch(tch)
+        {
+            case 'j': val = val + 50;break;
+            case 'k': val = val - 50;break;
+            case 'r': return;
+            default: motorStop(); val = 0; break;
+
+        }
+
+        if(val > 1 && val <= 999){
+            motorCustom(val, val, val, val);
+            delay(100);
+        }
+        else if(val > 999)
+        {
+            motorCustom(999, 999, 999, 999);
+            val = 999;
+        }
         
+        else if(val < 0)
+        {
+            motorCustom(2, 2, 2, 2);
+            val = 2;
+        }
         SerialUSB.println(val);
     }
         
