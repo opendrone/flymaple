@@ -26,6 +26,7 @@ unsigned long interval = 1000;
 void flightMode()
 {
     SerialUSB.println(">> Flight Mode <<");
+    //TODO
     return;
 }
 
