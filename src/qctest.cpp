@@ -67,7 +67,7 @@ void sensorsTest()
         Serial2.print(";");
     }
     
-    delay(100);
+    delay(50);
   //延时50毫秒
     return;
 }
