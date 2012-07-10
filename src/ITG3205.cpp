@@ -52,8 +52,8 @@ void getGyroscopeData(int16 * result)
 
   readFrom(GYRO, regAddress, G_TO_READ, buff); //读取陀螺仪ITG3200的数据
 
-  result[0] = (((uint16)buff[2] << 8) | buff[3]) + g_offx;
-  result[1] = (((uint16)buff[4] << 8) | buff[5]) + g_offy;
-  result[2] = (((uint16)buff[6] << 8) | buff[7]) + g_offz;
-  result[3] = ((uint16)buff[0] << 8) | buff[1]; // 温度
+  result[0] = (((int16)buff[2] << 8) | buff[3]) + g_offx;
+  result[1] = (((int16)buff[4] << 8) | buff[5]) + g_offy;
+  result[2] = (((int16)buff[6] << 8) | buff[7]) + g_offz;
+  result[3] = ((int16)buff[0] << 8) | buff[1]; // 温度
 }

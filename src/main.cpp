@@ -16,6 +16,7 @@
 #include "ITG3205.h"
 #include "ADXL345.h"
 #include "BMP085.h"
+#include "HMC5883.h"
 #include "motor.h"
 
 #define BS '\b'
@@ -44,11 +45,17 @@ void setup()
     Serial2.begin(9600);
     Serial2.println("Hello world!");
 
-    motorInit();//电机控制初始化 
-    i2c_master_enable(I2C1, 0);
-    initAcc();  
-    initGyro();
+    motorInit();//电机控制初始化
+    delay(300);
+    i2c_master_enable(I2C1, 0); //i2c init
+    initAcc();    //Accelerometer Init
+    initGyro();   //Gyroscope Init
     bmp085Calibration();
+    compassInit(false);   //初始化罗盘
+//    compassCalibrate(1);  //校准一次罗盘，gain为1.3Ga
+//    commpassSetMode(0);  //设置为连续测量模式 
+
+    delay(100);
 
     /* Send a message out the usb virtual serial port  */
     SerialUSB.println("Hello!");

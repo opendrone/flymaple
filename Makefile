@@ -26,13 +26,15 @@ PRODUCT_ID := 0003
 ##
 ## Useful paths, constants, etc.
 ##
-SRCS=	ADXL345.cpp \
-		BMP085.cpp  \
-		ITG3205.cpp \
-		qctest.cpp  \
-		misc.cpp	\
-		motor.cpp	\
-		main.cpp    
+SRCS=	ADXL345.cpp 	\
+	BMP085.cpp  	\
+	ITG3205.cpp 	\
+	HMC5883.cpp	\
+	CapturePPM.cpp	\
+	misc.cpp	\
+	motor.cpp	\
+	qctest.cpp	\
+	main.cpp    
 
 #SRCS = $(wildcard *.cpp) 
 INCLUDES=${SRCS:.cpp=.h}  
