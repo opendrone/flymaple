@@ -33,7 +33,9 @@ SRCS=	ADXL345.cpp 	\
 	CapturePPM.cpp	\
 	misc.cpp	\
 	motor.cpp	\
+	Processing.cpp	\
 	qctest.cpp	\
+	flight.cpp	\
 	main.cpp    
 
 #SRCS = $(wildcard *.cpp) 
@@ -60,6 +62,7 @@ include $(MAKEDIR)/target-config.mk
 ## Compilation flags
 ##
 
+SPFLAGS	+=	-DCLI
 GLOBAL_FLAGS    := -D$(VECT_BASE_ADDR)					     \
 		   -DBOARD_$(BOARD) -DMCU_$(MCU)			     \
 		   -DERROR_LED_PORT=$(ERROR_LED_PORT)			     \
@@ -67,7 +70,7 @@ GLOBAL_FLAGS    := -D$(VECT_BASE_ADDR)					     \
 		   -D$(DENSITY)
 GLOBAL_CFLAGS   := -DCLI -Os -g3 -gdwarf-2  -mcpu=cortex-m3 -mthumb -march=armv7-m \
 		   -nostdlib -ffunction-sections -fdata-sections	     \
-		   -Wl,--gc-sections $(GLOBAL_FLAGS)
+		   -Wl,--gc-sections $(GLOBAL_FLAGS) $(SPFLAGS)
 GLOBAL_CXXFLAGS := -fno-rtti -fno-exceptions -Wall $(GLOBAL_FLAGS)
 GLOBAL_ASFLAGS  := -mcpu=cortex-m3 -march=armv7-m -mthumb		     \
 		   -x assembler-with-cpp $(GLOBAL_FLAGS)

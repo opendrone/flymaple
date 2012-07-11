@@ -5,4 +5,8 @@
 
 #define PWM_PIN 2
 
+void setup();
+void loop();
+int main(void);
+
 #endif

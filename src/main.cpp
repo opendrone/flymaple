@@ -10,27 +10,15 @@
 
 
 #include "main.h"
-#include "i2c.h"
+#include "flight.h"
 #include "config.h"
 #include "qctest.h"
-#include "ITG3205.h"
-#include "ADXL345.h"
-#include "BMP085.h"
-#include "HMC5883.h"
+#include "sensors.h"
 #include "motor.h"
 
 #define BS '\b'
 
-unsigned long previousMillis = 0;        
-unsigned long interval = 1000;           
-
-void flightMode()
-{
-    SerialUSB.println(">> Flight Mode <<");
-    //TODO
-    return;
-}
-
+unsigned long previousMillis = 0;
 
 void setup()
 {
@@ -67,10 +55,9 @@ void loop()
 {
     int i = BOOTDELAY;
     char ch;
-    
-    delay(3000);
-
+    unsigned long interval = 1000;
     unsigned long currentMillis ;
+
     previousMillis = millis();
 
     SerialUSB.print("\n\rPress any key to enter [Test Mode]:  ");

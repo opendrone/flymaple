@@ -11,13 +11,11 @@
  */
 
 #include "misc.h"
+#include "i2c.h"
 #include "qctest.h"
-#include "ADXL345.h"
-#include "ITG3205.h"
-#include "BMP085.h"
-#include "HMC5883.h"
-#include "CapturePPM.h"
+#include "sensors.h"
 #include "motor.h"
+#include "Processing.h"
 
 char str[512];
 
@@ -36,15 +34,13 @@ void sensorsTest()
 {
     int16 acc[3];
     int16 gyro[4];
-    int16 i = 0, j = 0;
+    int16 i = 0;
     int16 temperature = 0;
     int32 pressure = 0;
     int32 centimeters = 0;
     float Heading;
-    int16 compass[3];
 
     SerialUSB.println("\n\rSensors Testing...");
-    //Put Sensors Test Codes Here
     SerialUSB.println();
 
     puts("Sensors Test begin: \r\n\n");
@@ -56,7 +52,8 @@ void sensorsTest()
         temperature = bmp085GetTemperature(bmp085ReadUT());
         pressure = bmp085GetPressure(bmp085ReadUP());
         centimeters = bmp085GetAltitude(); //获得海拔高度，单位厘米
-        
+
+        /********* Acceleometer ********/
         for(i = 0; i < 3; i++)
         {
             SerialUSB.print(acc[i], DEC);
@@ -64,40 +61,42 @@ void sensorsTest()
             SerialUSB.print("\t");
             Serial2.print(",");
         }
-        
-        compassRead(compass);
 
-        for(i = 0; i < 3; i++)
-        {
-            SerialUSB.print(compass[i], DEC);
-            Serial2.print(compass[i], DEC);
-            SerialUSB.print("\t");
-            Serial2.print(",");
-        }
-        
+        SerialUSB.print("|\t");
+        /******** Compass Heading *******/
         Heading = compassHeading();
         SerialUSB.print(Heading, DEC);
-        SerialUSB.print("\t");
+        SerialUSB.print("|\t");
         Serial2.print(",");
         
-        for(j = 0; j < 4; j++)
-        {
-            SerialUSB.print(gyro[i], DEC);
-            Serial2.print(gyro[i], DEC);
+        /******** Gyroscope **************/
+        for(i = 0; i < 3; i++)
+        {  
+            SerialUSB.print(gyro[i]);
+            Serial2.print(gyro[i]);
             Serial2.print(",");
             SerialUSB.print("\t");
         }
+
+        SerialUSB.print("|\t");
+
+#ifdef PROCESSING
+        /********* Processing *************/
+        processing(acc, gyro);
+#endif
         
+        /******** Other Sensors ***********/
         SerialUSB.print(temperature, DEC);
-        SerialUSB.print("\t");
+        SerialUSB.print("\t|\t");
         SerialUSB.print(pressure, DEC);
-        SerialUSB.println("\t");
-        //       SerialUSB.print(centimeters, DEC);
-        // SerialUSB.println("\t");
-        
+        SerialUSB.print("\t|\t");
+        SerialUSB.print(centimeters, DEC);
+        SerialUSB.print("\t|\t");
+
+        SerialUSB.println();
         Serial2.println();
         
-        delay(100);
+        delay(50);
         
     }
     
@@ -115,9 +114,8 @@ void sensorsTest()
 void motorsTest()
 {
     unsigned long pMills = millis();
-    int interal = 1000;
     unsigned long curMills = 0;
-
+    int i = 0;
     char tch;
     int val = 2;
 
@@ -125,6 +123,7 @@ void motorsTest()
 
     motorStop(); //stop the motor for init
     SerialUSB.println("Motor Stoped.");
+    delay(100);
     
     while(!SerialUSB.available())
     {
@@ -139,12 +138,14 @@ void motorsTest()
     }
 
     motorStop();
-    delay(1000);
+    delay(100);
     
-    SerialUSB.println("Press j for increace Motor, press K for motor Decrease.");
+    SerialUSB.println("Press j for increace Motor, Press K for motor Decrease.");
     
     while(1)
     {
+        while(!SerialUSB.available()); //eat waste byte
+        
         tch = SerialUSB.read();
 
         switch(tch)
@@ -158,7 +159,6 @@ void motorsTest()
 
         if(val > 1 && val <= 999){
             motorCustom(val, val, val, val);
-            delay(100);
         }
         else if(val > 999)
         {
@@ -171,7 +171,18 @@ void motorsTest()
             motorCustom(2, 2, 2, 2);
             val = 2;
         }
-        SerialUSB.println(val);
+        SerialUSB.print("\033[K"); 
+        SerialUSB.print("  ");
+        SerialUSB.print(val);
+        SerialUSB.print("\t>>|");
+        
+        for(i = 0; i < 40; i++)
+        {
+            if(i <= val / 25) SerialUSB.print("|");
+            else SerialUSB.print("-");
+        }
+        SerialUSB.print("|<<");
+        SerialUSB.print("\r");
     }
 
     motorStop();
