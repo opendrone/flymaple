@@ -113,81 +113,100 @@ void sensorsTest()
  */
 void motorsTest()
 {
-    unsigned long pMills = millis();
-    unsigned long curMills = 0;
-    int i = 0;
+    int i = 0, j = 0;
     char tch;
     int val = 2;
+    
+    uint16 motor[5] = {0};
 
     SerialUSB.println("\n\rMotors Testing...");
 
     motorStop(); //stop the motor for init
-    SerialUSB.println("Motor Stoped.");
+    SerialUSB.println("Motor Stoped.\r\n");
     delay(100);
     
-    while(!SerialUSB.available())
-    {
-        curMills = millis();
-        switch(curMills - pMills)
-        {
-        case 1000: {SerialUSB.println("Motor Rolling Half..."); motorHalf();break;}
-        case 6000: {SerialUSB.println("Motor Customs...");  motorCustom(200, 300, 500, 800); break;}
-        case 14000: pMills = curMills; break;
-            default: break;
-        }
-    }
-
-    motorStop();
-    delay(100);
+    SerialUSB.println("## NOTE: Press 1 ~ 4 to select motor, or Press 'a' for select All motors.");
+    SerialUSB.println("##       Press 'j' for increace Motor, Press 'k' for motor Decrease.");
     
-    SerialUSB.println("Press j for increace Motor, Press K for motor Decrease.");
+    puts("\r\n");
     
     while(1)
     {
+        puts("M1: ");
+        displayThruttle(motor[1]);
+        puts("\r\n");
+        puts("M2: ");
+        displayThruttle(motor[2]);
+        puts("\r\n");
+        puts("M3: ");
+        displayThruttle(motor[3]);
+        puts("\r\n");
+        puts("M4: ");
+        displayThruttle(motor[4]);
+        puts("\r");
+
         while(!SerialUSB.available()); //eat waste byte
         
         tch = SerialUSB.read();
 
         switch(tch)
         {
-            case 'j': val = val + 50;break;
-            case 'k': val = val - 50;break;
+            case '1': j = 1;  break; continue;
+            case '2': j = 2;  break; continue;
+            case '3': j = 3;  break; continue;
+            case '4': j = 4;  break; continue;
+            case 'a': j = 0; break; continue;
+            case 'j': val += 50;break;
+            case 'k': val -= 50;break;
             case 'r': return;
             default: motorStop(); val = 0; break;
 
         }
 
-        if(val > 1 && val <= 999){
-            motorCustom(val, val, val, val);
+        if(val > 999) val = 999;
+        else if(val < 0) val = 2;
+
+        if(j != 0) motor[j] = val;
+        else for(i = 0;i <= 4; i++) motor[i] = val;
+
+        /*
+        for(i = 0; i < 5 ; i++)
+        {  
+            SerialUSB.print(motor[i]);
+            SerialUSB.print("\t");
         }
-        else if(val > 999)
-        {
-            motorCustom(999, 999, 999, 999);
-            val = 999;
-        }
-        
-        else if(val < 0)
-        {
-            motorCustom(2, 2, 2, 2);
-            val = 2;
-        }
-        SerialUSB.print("\033[K"); 
-        SerialUSB.print("  ");
-        SerialUSB.print(val);
-        SerialUSB.print("\t>>|");
-        
-        for(i = 0; i < 40; i++)
-        {
-            if(i <= val / 25) SerialUSB.print("|");
-            else SerialUSB.print("-");
-        }
-        SerialUSB.print("|<<");
-        SerialUSB.print("\r");
+        SerialUSB.println(val);
+        puts("\r\n");
+        */
+       
+        motorCustom(motor[1], motor[2], motor[3], motor[4]);
+        puts("\033[A");puts("\033[A");puts("\033[A");//puts("\033[A");
     }
 
     motorStop();
     return;
 }
+
+/** 
+ * Display Thruttle
+ * 
+ */
+void displayThruttle(int val)
+{
+    int i = 0;
+    SerialUSB.print("\t");
+    SerialUSB.print("\033[K"); 
+    SerialUSB.print(val);
+    SerialUSB.print("\t>>|");
+    
+    for(i = 0; i < 40; i++)
+    {
+        if(i <= val / 25) SerialUSB.print("|");
+        else SerialUSB.print("-");
+    }
+    SerialUSB.print("|<<");
+}
+
 
 /** 
  * Remote Control Test
