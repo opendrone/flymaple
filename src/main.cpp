@@ -36,15 +36,20 @@ void setup()
     motorInit();//电机控制初始化
     delay(300);
     i2c_master_enable(I2C1, 0); //i2c init
+    delay(100);
     initAcc();    //Accelerometer Init
+    delay(100);
     initGyro();   //Gyroscope Init
+    delay(100);
     bmp085Calibration();
     compassInit(false);   //初始化罗盘
 //    compassCalibrate(1);  //校准一次罗盘，gain为1.3Ga
 //    commpassSetMode(0);  //设置为连续测量模式 
 
     delay(100);
-
+    capturePPMInit();
+    delay(100);
+    
     /* Send a message out the usb virtual serial port  */
     SerialUSB.println("Hello!");
     SerialUSB.println("Test1234567890!");
