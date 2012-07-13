@@ -133,18 +133,19 @@ void motorsTest()
     while(1)
     {
         puts("M1: ");
-        displayThruttle(motor[1]);
+        displayThrottle(motor[1]);
         puts("\r\n");
         puts("M2: ");
-        displayThruttle(motor[2]);
+        displayThrottle(motor[2]);
         puts("\r\n");
         puts("M3: ");
-        displayThruttle(motor[3]);
+        displayThrottle(motor[3]);
         puts("\r\n");
         puts("M4: ");
-        displayThruttle(motor[4]);
+        displayThrottle(motor[4]);
         puts("\r");
-
+        puts("\033[A");puts("\033[A");puts("\033[A");//puts("\033[A");
+        
         while(!SerialUSB.available()); //eat waste byte
         
         tch = SerialUSB.read();
@@ -178,9 +179,9 @@ void motorsTest()
         SerialUSB.println(val);
         puts("\r\n");
         */
-       
+
         motorCustom(motor[1], motor[2], motor[3], motor[4]);
-        puts("\033[A");puts("\033[A");puts("\033[A");//puts("\033[A");
+        
     }
 
     motorStop();
@@ -191,7 +192,7 @@ void motorsTest()
  * Display Thruttle
  * 
  */
-void displayThruttle(int val)
+void displayThrottle(int val)
 {
     int i = 0;
     SerialUSB.print("\t");
@@ -218,8 +219,22 @@ void remoteTest()
 {
     SerialUSB.println("\n\rRemote Control Testing...");
 
-    while(!SerialUSB.available())
+    do
     {
+        puts("CH1: ");
+        displayThrottle(chan1PPM - 1000);
+        puts("\r\n");
+        puts("CH2: ");
+        displayThrottle(chan2PPM - 1000);
+        puts("\r\n");
+        puts("CH3: ");
+        displayThrottle(chan3PPM - 1000);
+        puts("\r\n");
+        puts("CH4: ");
+        displayThrottle(chan4PPM - 1000);
+        puts("\r");
+        
+        /********* Low Test **************
         SerialUSB.print("PPM Channel 1: ");
         SerialUSB.print(chan1PPM, DEC);
         SerialUSB.print("  ");  
@@ -231,9 +246,15 @@ void remoteTest()
         SerialUSB.print("  ");  
         SerialUSB.print("PPM Channel 4: ");
         SerialUSB.print(chan4PPM, DEC);
-        SerialUSB.println("  ");  
-        delay(100);
-    }
+        SerialUSB.println("  ");
+        /*********************************/
+        
+         puts("\033[A");puts("\033[A");puts("\033[A");//puts("\033[A");
+         
+    }while(chan1PPM & chan2PPM & chan3PPM & chan4PPM != 0);
+    
+    while(!SerialUSB.available()) SerialUSB.print("PPM Error, Press any key to quit.\r");
+    
     
     return;
 }

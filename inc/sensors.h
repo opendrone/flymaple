@@ -12,6 +12,7 @@
 #define __SENSORS__
 
 #include "wirish.h"
+#include "libmaple_types.h"
 #include "i2c.h"
 #include "config.h"
 #include "ITG3205.h"
@@ -19,6 +20,7 @@
 #include "BMP085.h"
 #include "HMC5883.h"
 #include "CapturePPM.h"
+
 
 #endif
 
