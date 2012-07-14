@@ -24,40 +24,6 @@
 #define LEFT    0x14
 #define RIGHT   0x13
 
-//---------------- 功能
-//将val写入到加速度传感器的地址寄存器中
-void writeTo(uint8 DEVICE, uint8 address, uint8 val) {
-  /* all i2c transactions send and receive arrays of i2c_msg objects */
-  i2c_msg msgs[1]; // we dont do any bursting here, so we only need one i2c_msg object
- uint8 msg_data[2];
-  
-  msg_data = {address,val};  //写两个数据，一个地址，一个值
-  msgs[0].addr = DEVICE;
-  msgs[0].flags = 0; // 写操作
-  msgs[0].length = 2; //写两个数据
-  msgs[0].data = msg_data;
-  i2c_master_xfer(I2C1, msgs, 1,0);  //
-}
-
-
-//I2C传感器在地址寄存器的缓冲区阵列中读取读数
-void readFrom(uint8 DEVICE, uint8 address, uint8 num, uint8 *msg_data) {
-  i2c_msg msgs[1]; 
-  msg_data[0] = address;
-  
-  msgs[0].addr = DEVICE;
-  msgs[0].flags = 0; //标志为0，是写操作
-  msgs[0].length = 1; // just one byte for the address to read, 0x00
-  msgs[0].data = msg_data;
-  i2c_master_xfer(I2C1, msgs, 1,0);
-  
-  msgs[0].addr = DEVICE;
-  msgs[0].flags = I2C_MSG_READ; //读取
-  msgs[0].length = num; // 读取字节数
-  msgs[0].data = msg_data;
-  i2c_master_xfer(I2C1, msgs, 1,0);
-}
-
 int putchar(char c)
 {
     SerialUSB.print(c);
@@ -275,7 +241,6 @@ char *puts(const char *s)
  
 char *gets(char *s)
 {
-    int i;
     char c;
     
     while( (c = getchar()) != ENTER)

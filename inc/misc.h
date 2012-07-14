@@ -12,11 +12,6 @@
 #define __MISC_H__
 
 #include "libmaple_types.h"
-
-void writeTo(uint8 DEVICE, uint8 address, uint8 val);
-
-void readFrom(uint8 DEVICE, uint8 address, uint8 num, uint8 *msg_data);
-
  
 int strlen(const char *s);
 

@@ -26,12 +26,13 @@ PRODUCT_ID := 0003
 ##
 ## Useful paths, constants, etc.
 ##
-SRCS=	ADXL345.cpp \
-		BMP085.cpp  \
-		ITG3205.cpp \
-		qctest.cpp  \
-		misc.cpp	\
-		motor.cpp	\
+SRCS=	Sensor.cpp \
+		Accelerometer.cpp \
+		Compass.cpp \
+		Gyroscope.cpp \
+		GlobalXYZ.cpp \
+		qctest.cpp \
+		misc.cpp \
 		main.cpp    
 
 #SRCS = $(wildcard *.cpp) 
@@ -63,7 +64,7 @@ GLOBAL_FLAGS    := -D$(VECT_BASE_ADDR)					     \
 		   -DERROR_LED_PORT=$(ERROR_LED_PORT)			     \
 		   -DERROR_LED_PIN=$(ERROR_LED_PIN)			     \
 		   -D$(DENSITY)
-GLOBAL_CFLAGS   := -DCLI -Os -g3 -gdwarf-2  -mcpu=cortex-m3 -mthumb -march=armv7-m \
+GLOBAL_CFLAGS   := -Os -g3 -gdwarf-2  -mcpu=cortex-m3 -mthumb -march=armv7-m \
 		   -nostdlib -ffunction-sections -fdata-sections	     \
 		   -Wl,--gc-sections $(GLOBAL_FLAGS)
 GLOBAL_CXXFLAGS := -fno-rtti -fno-exceptions -Wall $(GLOBAL_FLAGS)
