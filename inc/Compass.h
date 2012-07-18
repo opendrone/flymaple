@@ -8,12 +8,14 @@ class Compass {
 	
 	static const unsigned char CompassAddress;
 	static const short sign[3];
+	static const double scale[3];
 	
-	Compass();
+	Compass(unsigned char gain = 5);
 	void getRawReading(short& x,short& y,short& z);
 public:
 	~Compass();
 	static Vector<double> getReading();
+	static void calibrate(unsigned char gain = 5);
 };
 
 #endif

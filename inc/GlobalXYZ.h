@@ -12,8 +12,8 @@ class GlobalXYZ {
 	static Vector<double> Y;
 	static Vector<double> Z;
 	static unsigned int timestamp;
-	void getX(Vector<double> & newX,Vector<double> & deltaTheta);
 	void getZ(Vector<double> & newZ,Vector<double> & deltaTheta);
+	void getX(const Vector<double> & newZ,Vector<double> & newX,Vector<double> & deltaTheta);
 	void getY(const Vector<double> & newX,const Vector<double> & newZ,Vector<double> & newY);
 	void update(const Vector<double> & newX,const Vector<double> & newY,const Vector<double> & newZ);
 public:

@@ -11,7 +11,6 @@
 
 #include "main.h"
 #include "i2c.h"
-#include "config.h"
 #include "qctest.h"
 
 #define BS '\b'
@@ -47,7 +46,7 @@ void setup()
 
 void loop()
 {
-    int i = BOOTDELAY;
+    int i = 5;
     char ch;
     
     delay(3000);

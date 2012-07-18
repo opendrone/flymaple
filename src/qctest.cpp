@@ -10,7 +10,6 @@
  * 
  */
 
-#include "misc.h"
 #include "qctest.h"
 #include "Accelerometer.h"
 #include "Compass.h"
@@ -32,6 +31,13 @@ void sensorsTest()
 
 	while(1) {
 #if 0
+		Vector<double> x,y,z;
+		GlobalXYZ::getXYZ(x,y,z);
+		SerialUSB.print("X = ("); SerialUSB.print(x(0)); SerialUSB.print(","); SerialUSB.print(x(1)); SerialUSB.print(","); SerialUSB.print(x(2)); SerialUSB.print(") ");
+		SerialUSB.print("Y = ("); SerialUSB.print(y(0)); SerialUSB.print(","); SerialUSB.print(y(1)); SerialUSB.print(","); SerialUSB.print(y(2)); SerialUSB.print(") ");
+		SerialUSB.print("Z = ("); SerialUSB.print(z(0)); SerialUSB.print(","); SerialUSB.print(z(1)); SerialUSB.print(","); SerialUSB.print(z(2)); SerialUSB.print(")");
+#endif
+#if 1
 		double roll = 0,pitch = 0,yaw = 0;
 		GlobalXYZ::getRPY(roll,pitch,yaw);
 		roll *= 180 / 3.1415926; pitch *= 180 / 3.1415926; yaw *= 180 / 3.1415926;
@@ -51,11 +57,14 @@ void sensorsTest()
 		SerialUSB.print("\ty = "); SerialUSB.print(retVal(1)); 
 		SerialUSB.print("\tz = "); SerialUSB.print(retVal(2));		
 #endif
-#if 1
+#if 0
 		Vector<double> retVal = Compass::getReading();
 		SerialUSB.print("x = "); SerialUSB.print(retVal(0));
 		SerialUSB.print("\ty = "); SerialUSB.print(retVal(1));
 		SerialUSB.print("\tz = "); SerialUSB.print(retVal(2));
+#endif
+#if 0
+		Compass::calibrate();
 #endif
 
 		SerialUSB.println();

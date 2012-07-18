@@ -18,10 +18,10 @@ unsigned int GlobalXYZ::timestamp;
 GlobalXYZ::GlobalXYZ()
 {
 	Vector<double> dTheta;
-	//初始化全局坐标系的X向量
-	getX(X,dTheta);
 	//初始化全局坐标系的Z向量
 	getZ(Z,dTheta);
+	//初始化全局坐标系的X向量
+	getX(Z,X,dTheta);
 	//初始化全局坐标系的Y向量
 	getY(X,Z,Y);
 	//设置时间戳
@@ -30,18 +30,6 @@ GlobalXYZ::GlobalXYZ()
 
 GlobalXYZ::~GlobalXYZ()
 {
-}
-
-void GlobalXYZ::getX(Vector<double> & newX,Vector<double> & deltaTheta)
-{
-	Vector<double> north = Compass::getReading();
-	double modulus = sqrt(north(0) * north(0) + north(1) * north(1) + north(2) * north(2));
-	newX = Vector<double>(3);
-	newX(0) = north(0) / modulus;
-	newX(1) = north(1) / modulus;
-	newX(2) = north(2) / modulus;
-	Vector<double> dX = newX - X;
-	deltaTheta = cross_prod(X,dX);
 }
 
 void GlobalXYZ::getZ(Vector<double> & newZ,Vector<double> & deltaTheta)
@@ -54,6 +42,21 @@ void GlobalXYZ::getZ(Vector<double> & newZ,Vector<double> & deltaTheta)
 	newZ(2) = -accOfG(2) / modulus;
 	Vector<double> dZ = newZ - Z;
 	deltaTheta = cross_prod(Z,dZ);
+}
+
+void GlobalXYZ::getX(const Vector<double> & newZ,Vector<double> & newX,Vector<double> & deltaTheta)
+{
+	Vector<double> northMagneticPole = Compass::getReading();
+	Vector<double> north(3);
+	north(0) = northMagneticPole(0); north(1) = northMagneticPole(1);
+	north(2) = - (north(0) * newZ(0) + north(1) * newZ(1)) / newZ(2);
+	double modulus = sqrt(north(0) * north(0) + north(1) * north(1) + north(2) * north(2));
+	newX = Vector<double>(3);
+	newX(0) = north(0) / modulus;
+	newX(1) = north(1) / modulus;
+	newX(2) = north(2) / modulus;
+	Vector<double> dX = newX - X;
+	deltaTheta = cross_prod(X,dX);
 }
 
 void GlobalXYZ::getY(const Vector<double> & newX,const Vector<double> & newZ,Vector<double> & newY)
@@ -79,8 +82,8 @@ void GlobalXYZ::getXYZ(Vector<double> & retValX,Vector<double> & retValY,Vector<
 	//计算XYZ三轴
 	Vector<double> newZ,newX,newY;
 	Vector<double> dThetaComp,dThetaAcc,dThetaGyro;
-	xyz.getX(newX,dThetaComp);
 	xyz.getZ(newZ,dThetaAcc);
+	xyz.getX(newZ,newX,dThetaComp);
 	xyz.getY(newX,newZ,newY);
 	Vector<double> angularSpd = Gyroscope::getReading();
 	dThetaGyro = angularSpd * dt;

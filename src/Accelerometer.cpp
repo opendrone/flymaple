@@ -10,7 +10,8 @@ const unsigned char Accelerometer::ADXLREG_DATA_FORMAT = 0x31;
 const unsigned char Accelerometer::ADXLREG_DEVID = 0x00;
 const unsigned char Accelerometer::ADXLREG_DATAX0 = 0x32;
 const unsigned short Accelerometer::GRAVITY = 248;
-const short Accelerometer::sign[3] = {1,1,1};
+//NOTICE:加速仪的z输出是飞机提坐标系的Z的反方向
+const short Accelerometer::sign[3] = {1,1,-1};
 const float Accelerometer::sensitivity = 0.004;
 short Accelerometer::offset[3] = {0,0,0};
 
@@ -41,7 +42,7 @@ Accelerometer::Accelerometer()
 	}
 	for(int i = 0 ; i < 3 ; i++) accumulator[i] /= 100;
 	//FIXME:程序假设飞机一开始水平摆放，但是不一定正确
-	accumulator[2] -= GRAVITY * sign[2];
+	accumulator[2] -= GRAVITY;
 	for(int i = 0 ; i < 3 ; i++) offset[i] = accumulator[i];
 }
 
