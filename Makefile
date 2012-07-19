@@ -31,6 +31,7 @@ SRCS=	ADXL345.cpp 	\
 	ITG3205.cpp 	\
 	HMC5883.cpp	\
 	CapturePPM.cpp	\
+        GlobalXYZ.cpp \
 	misc.cpp	\
 	motor.cpp	\
 	Processing.cpp	\
