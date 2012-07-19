@@ -87,7 +87,7 @@ void GlobalXYZ::getXYZ(Vector<double> & retValX,Vector<double> & retValY,Vector<
 	xyz.getY(newX,newZ,newY);
 	Vector<double> angularSpd = Gyroscope::getReading();
 	dThetaGyro = angularSpd * dt;
-	//滤波
+	//融合
 	Vector<double> sum;
 	sum = dThetaAcc + dThetaComp;
 	sum = sum + dThetaGyro;
@@ -97,7 +97,13 @@ void GlobalXYZ::getXYZ(Vector<double> & retValX,Vector<double> & retValY,Vector<
 	dX = cross_prod(dTheta,X);
 	dY = cross_prod(dTheta,Y);
 	dZ = cross_prod(dTheta,Z);
+#if 1
+	//融合版本
 	retValX = X + dX; retValY = Y + dY; retValZ = Z + dZ;
+#else
+	//没有融合版本
+	retValX = newX; retValY = newY; retValZ = newZ;
+#endif
 	//更新状态
 	xyz.update(newX,newY,newZ);
 	//更新时间戳
@@ -114,7 +120,7 @@ void GlobalXYZ::getRPY(double & roll,double & pitch,double & yaw)
 	DCM(1,0) = newY(0);	DCM(1,1) = newY(1);	DCM(1,2) = newY(2);
 	DCM(2,0) = newZ(0);	DCM(2,1) = newZ(1);	DCM(2,2) = newZ(2);
 	//计算返回值
-	roll = atan2(DCM(2,1),DCM(2,2));
-	pitch = -asin(DCM(2,0));
+	roll = -atan2(DCM(2,1),DCM(2,2));
+	pitch = asin(DCM(2,0));
 	yaw = atan2(DCM(1,0),DCM(0,0));
 }
