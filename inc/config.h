@@ -16,6 +16,9 @@
 /* Bootdelay Seconds */
 #define BOOTDELAY 5
 
+#define MAX_RPM 999
+#define IDLE_RPM 300
+
 #define Channel1Pin  D31  //PPM捕获管脚定义 数字口31
 #define Channel2Pin  D32
 #define Channel3Pin  D33

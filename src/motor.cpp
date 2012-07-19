@@ -103,6 +103,15 @@ void motorInit(void)
   MotorData[3] = pwm3;
   motorCcontrol();   //计算各个电机控制量之差,将这个值用于定时器产生中断改变相应电机脉冲高电平时间
  }
-   
+
+void motorIdle()
+{
+    MotorData[0] = IDLE_RPM;
+    MotorData[1] = IDLE_RPM;
+    MotorData[2] = IDLE_RPM;
+    MotorData[3] = IDLE_RPM;
+    motorCcontrol(); 
+}
+
    
 

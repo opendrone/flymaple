@@ -26,7 +26,7 @@ void qcTakeOff(void);
 
 void qcLanding(void);
 
-void displayThruttle(int val);
+void displayThrottle(int val);
 
 
 #endif

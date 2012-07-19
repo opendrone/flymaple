@@ -7,6 +7,6 @@
 
 void setup();
 void loop();
-int main(void);
+//int main(void);
 
 #endif
