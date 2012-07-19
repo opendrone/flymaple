@@ -52,7 +52,7 @@ OBJS+=$(addprefix $(APP_OBJ_PATH)/, $(SRCS:.cpp=.o))
 
 # Try "make help" for more information on BOARD and MEMORY_TARGET;
 # these default to a Maple Flash build.
-BOARD ?= maple
+BOARD ?= maple_RET6
 MEMORY_TARGET ?= flash
 
 # $(BOARD)- and $(MEMORY_TARGET)-specific configuration
@@ -62,7 +62,7 @@ include $(MAKEDIR)/target-config.mk
 ## Compilation flags
 ##
 
-SPFLAGS	+=	-DCLI
+SPFLAGS	+=	-DCLI #-DPROCESSING
 GLOBAL_FLAGS    := -D$(VECT_BASE_ADDR)					     \
 		   -DBOARD_$(BOARD) -DMCU_$(MCU)			     \
 		   -DERROR_LED_PORT=$(ERROR_LED_PORT)			     \
@@ -102,7 +102,7 @@ LIBMAPLE_MODULES += $(SRCROOT)/libraries/LiquidCrystal
 LIBMAPLE_MODULES += $(SRCROOT)/libraries/Wire
 
 # Experimental libraries:
-LIBMAPLE_MODULES += $(SRCROOT)/libraries/FreeRTOS
+#LIBMAPLE_MODULES += $(SRCROOT)/libraries/FreeRTOS
 
 # Call each module's rules.mk:
 $(foreach m,$(LIBMAPLE_MODULES),$(eval $(call LIBMAPLE_MODULE_template,$(m))))
