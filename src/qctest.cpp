@@ -16,6 +16,7 @@
 #include "sensors.h"
 #include "motor.h"
 #include "Processing.h"
+#include "GlobalXYZ.h"
 
 char str[512];
 
@@ -32,8 +33,11 @@ extern volatile unsigned int chan4PPM;
  */
 void sensorsTest()
 {
+//<<<<<<< HEAD
     int16 acc[3];
     int16 gyro[4];
+    int16 comp[3];
+    
     int16 i = 0;
     int16 temperature = 0;
     int32 pressure = 0;
@@ -63,7 +67,15 @@ void sensorsTest()
         }
 
         SerialUSB.print("|\t");
-        /******** Compass Heading *******/
+        /******** Compass Heading *******
+         for(i = 0; i < 3; i++)
+        {
+            SerialUSB.print(acc[i], DEC);
+            Serial2.print(acc[i], DEC);
+            SerialUSB.print("\t");
+            Serial2.print(",");
+        }
+        /*****************************/
         Heading = compassHeading();
         SerialUSB.print(Heading, DEC);
         SerialUSB.print("|\t");
@@ -99,8 +111,18 @@ void sensorsTest()
         delay(50);
         
     }
+//=======
+	GlobalXYZ xyz;
+	double roll,pitch,yaw;
+	while(1) {
+		xyz.getRPY(roll,pitch,yaw);
+		SerialUSB.print("roll = "); SerialUSB.print(roll * 180 / 3.1415926);
+		SerialUSB.print("\tpitch = "); SerialUSB.print(pitch * 180 / 3.1415926);
+		SerialUSB.print("\tyaw = "); SerialUSB.print(yaw * 180 / 3.1415926); SerialUSB.println();
+//>>>>>>> 7b10288edefda92c92224e6a5ee41ed239c8ab3c
     
-    delay(50);
+		delay(50);
+	}
     //延时50毫秒
     return;
 }
