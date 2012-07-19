@@ -25,7 +25,7 @@ void compassInit(uint8 setmode)
   {
     commpassSetMode(0);
   }
- // writeTo(HMC5883_ADDR, HMC5883_R_CONFA, 0x70); //8-average, 15 Hz default, normal measurement 每次输出采样8次，15HZ输出采样率，普通模式
+  writeTo(HMC5883_ADDR, HMC5883_R_CONFA, 0x70); //8-average, 15 Hz default, normal measurement 每次输出采样8次，15HZ输出采样率，普通模式
   //writeTo(HMC5883_ADDR, HMC5883_R_CONFB, 0xa0); // Gain=5, or any other desired gain 
   writeTo(HMC5883_ADDR, HMC5883_R_MODE, 0x00); // Set continouos mode (default to 10Hz)
 }

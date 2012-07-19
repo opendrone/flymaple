@@ -65,7 +65,7 @@ void sensorsTest()
         }
 
         SerialUSB.print("|\t");
-        /******** Compass Heading *******/
+        /******** Compass Heading *******
          for(i = 0; i < 3; i++)
         {
             SerialUSB.print(acc[i], DEC);
@@ -73,7 +73,7 @@ void sensorsTest()
             SerialUSB.print("\t");
             Serial2.print(",");
         }
-         /*****************************
+        /*****************************/
         Heading = compassHeading();
         SerialUSB.print(Heading, DEC);
         SerialUSB.print("|\t");
