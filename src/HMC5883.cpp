@@ -18,16 +18,10 @@ float y_scale = 1;
 float z_scale = 1;
 float x_max, y_max, z_max;
 
-void compassInit(uint8 setmode)
+void compassInit()
 {
-  delay(5);
-  if (setmode)
-  {
-    commpassSetMode(0);
-  }
- // writeTo(HMC5883_ADDR, HMC5883_R_CONFA, 0x70); //8-average, 15 Hz default, normal measurement 每次输出采样8次，15HZ输出采样率，普通模式
-  //writeTo(HMC5883_ADDR, HMC5883_R_CONFB, 0xa0); // Gain=5, or any other desired gain 
-  writeTo(HMC5883_ADDR, HMC5883_R_MODE, 0x00); // Set continouos mode (default to 10Hz)
+	commpassSetMode(0);
+	writeTo(HMC5883_ADDR, HMC5883_R_CONFA, 0x70); //8-average, 15 Hz default, normal measurement 每次输出采样8次，15HZ输出采样率，普通模式
 }
 
 void commpassSetMode(uint8 mode) 

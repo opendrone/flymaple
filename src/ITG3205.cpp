@@ -13,6 +13,7 @@
 #include "config.h"
 #include "misc.h"
 
+static short g_offset[] = {0,0,0};
 
 //初始化陀螺仪
 void initGyro()
@@ -32,6 +33,16 @@ void initGyro()
     writeTo(GYRO, G_SMPLRT_DIV, 0x07); //07 EB, 50, 80, 7F, DE, 23, 20, FF
     writeTo(GYRO, G_DLPF_FS, 0x1E); //1E +/- 2000 dgrs/sec, 1KHz, 1E, 19
     writeTo(GYRO, G_INT_CFG, 0x00);
+	
+	float accumulator[] = {0,0,0};
+	for(int i = 0 ; i < 100 ; i++) {
+		short gyro[4];
+		getGyroscopeData(gyro);
+		accumulator[0] += gyro[0];
+		accumulator[1] += gyro[1];
+		accumulator[2] += gyro[2];
+	}
+	for(int i = 0 ; i < 3 ; i++) g_offset[i] = accumulator[i] / 100;
 }
 
 
@@ -52,8 +63,8 @@ void getGyroscopeData(int16 * result)
 
     readFrom(GYRO, regAddress, G_TO_READ, buff); //读取陀螺仪ITG3200的数据
 
-    result[0] = (((int16)buff[2] << 8) | buff[3]) + g_offx;
-    result[1] = (((int16)buff[4] << 8) | buff[5]) + g_offy;
-    result[2] = (((int16)buff[6] << 8) | buff[7]) + g_offz;
+    result[0] = (((int16)buff[2] << 8) | buff[3]) + g_offset[0];
+    result[1] = (((int16)buff[4] << 8) | buff[5]) + g_offset[1];
+    result[2] = (((int16)buff[6] << 8) | buff[7]) + g_offset[2];
     result[3] = ((int16)buff[0] << 8) | buff[1]; // 温度
 }

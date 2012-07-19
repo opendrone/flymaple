@@ -16,6 +16,7 @@
 #include "sensors.h"
 #include "motor.h"
 #include "Processing.h"
+#include "GlobalXYZ.h"
 
 char str[512];
 
@@ -32,75 +33,16 @@ extern volatile unsigned int chan4PPM;
  */
 void sensorsTest()
 {
-    int16 acc[3];
-    int16 gyro[4];
-    int16 i = 0;
-    int16 temperature = 0;
-    int32 pressure = 0;
-    int32 centimeters = 0;
-    float Heading;
-
-    SerialUSB.println("\n\rSensors Testing...");
-    SerialUSB.println();
-
-    puts("Sensors Test begin: \r\n\n");
-    while(!SerialUSB.available())
-    {
-        getAccelerometerData(acc);
-        getGyroscopeData(gyro);
-        
-        temperature = bmp085GetTemperature(bmp085ReadUT());
-        pressure = bmp085GetPressure(bmp085ReadUP());
-        centimeters = bmp085GetAltitude(); //获得海拔高度，单位厘米
-
-        /********* Acceleometer ********/
-        for(i = 0; i < 3; i++)
-        {
-            SerialUSB.print(acc[i], DEC);
-            Serial2.print(acc[i], DEC);
-            SerialUSB.print("\t");
-            Serial2.print(",");
-        }
-
-        SerialUSB.print("|\t");
-        /******** Compass Heading *******/
-        Heading = compassHeading();
-        SerialUSB.print(Heading, DEC);
-        SerialUSB.print("|\t");
-        Serial2.print(",");
-        
-        /******** Gyroscope **************/
-        for(i = 0; i < 3; i++)
-        {  
-            SerialUSB.print(gyro[i]);
-            Serial2.print(gyro[i]);
-            Serial2.print(",");
-            SerialUSB.print("\t");
-        }
-
-        SerialUSB.print("|\t");
-
-#ifdef PROCESSING
-        /********* Processing *************/
-        processing(acc, gyro);
-#endif
-        
-        /******** Other Sensors ***********/
-        SerialUSB.print(temperature, DEC);
-        SerialUSB.print("\t|\t");
-        SerialUSB.print(pressure, DEC);
-        SerialUSB.print("\t|\t");
-        SerialUSB.print(centimeters, DEC);
-        SerialUSB.print("\t|\t");
-
-        SerialUSB.println();
-        Serial2.println();
-        
-        delay(50);
-        
-    }
+	GlobalXYZ xyz;
+	double roll,pitch,yaw;
+	while(1) {
+		xyz.getRPY(roll,pitch,yaw);
+		SerialUSB.print("roll = "); SerialUSB.print(roll * 180 / 3.1415926);
+		SerialUSB.print("\tpitch = "); SerialUSB.print(pitch * 180 / 3.1415926);
+		SerialUSB.print("\tyaw = "); SerialUSB.print(yaw * 180 / 3.1415926); SerialUSB.println();
     
-    delay(50);
+		delay(50);
+	}
     //延时50毫秒
     return;
 }

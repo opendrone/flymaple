@@ -30,7 +30,7 @@
 #define HMC5883_R_IDB 11   //Identification Register B  Read  
 #define HMC5883_R_IDC 12   //Identification Register C  Read
 
-void compassInit(uint8 setmode);
+void compassInit();
 void commpassSetMode(uint8 mode) ;
 void compassCalibrate(uint8 gain) ;
 void compassSetDOR(uint8 DOR);
