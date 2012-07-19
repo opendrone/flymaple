@@ -1,5 +1,6 @@
-#include <cmath>
-#include <limits>
+#include <math.h>
+#include <limits.h>
+//#include <limits>
 #include "wirish_time.h"
 #include "misc.h"
 #include "ADXL345.h"
@@ -7,8 +8,7 @@
 #include "ITG3205.h"
 #include "GlobalXYZ.h"
 
-using std::sqrt;
-using std::numeric_limits;
+//using std::numeric_limits;
 
 GlobalXYZ::GlobalXYZ()
 :X(3),Y(3),Z(3)
@@ -80,7 +80,8 @@ void GlobalXYZ::getXYZ(Vector<double> & retValX,Vector<double> & retValY,Vector<
 {
 	//计算与上次时间戳之间的时间
 	unsigned int newtimestamp = micros();
-	double dt = ((newtimestamp > timestamp)?(newtimestamp - timestamp):(numeric_limits<unsigned int>::max() - timestamp + newtimestamp)) * 1.0 / 1e6;
+	double dt = ((newtimestamp > timestamp)?(newtimestamp - timestamp):(UINT_MAX - timestamp + newtimestamp)) * 1.0 / 1e6;
+	//double dt = ((newtimestamp > timestamp)?(newtimestamp - timestamp):(numeric_limits<unsigned int>::max() - timestamp + newtimestamp)) * 1.0 / 1e6;
 	//计算XYZ三轴
 	Vector<double> newZ,newX,newY;
 	Vector<double> dThetaComp,dThetaAcc,dThetaGyro;

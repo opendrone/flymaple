@@ -1,6 +1,6 @@
 #ifndef VECTOR_H
 #define VECTOR_H
-
+#define NDEBUG
 #include "Matrix.h"
 
 template<typename T>

@@ -1,9 +1,9 @@
 #ifndef MATRIX_H
 #define MATRIX_H
+#define NDEBUG
+#include <assert.h>
 
-#include <cassert>
-
-using namespace std;
+//using namespace std;
 
 template<typename T>
 class Matrix {
