@@ -1,7 +1,7 @@
 /**
  * @file   main.cpp
- * @author openDrone <opendrone@googlegroups.com>
- * @date   Wed Apr 11 22:59:22 2012
+ * @author breadbread1984 <breadbread1984@163.com>
+ * @date   Sat Jul 21 22:59:22 2012
  * 
  * @brief  openDrone Quadcopter Main function File
  * @license GPLv3
@@ -10,20 +10,7 @@
 
 
 #include "main.h"
-#include "i2c.h"
-#include "qctest.h"
-
-#define BS '\b'
-
-unsigned long previousMillis = 0;        
-unsigned long interval = 1000;           
-
-void flightMode()
-{
-    SerialUSB.println(">> Flight Mode <<");
-    return;
-}
-
+#include "GlobalXYZ.h"
 
 void setup()
 {
@@ -36,88 +23,54 @@ void setup()
 
     /* Send a message out USART2  */
     Serial2.begin(9600);
-    Serial2.println("Hello world!");
-
-    /* Send a message out the usb virtual serial port  */
-    SerialUSB.println("Hello!");
-    SerialUSB.println("Test1234567890!");
 }
 
 
 void loop()
 {
-    int i = 5;
-    char ch;
+	while(1) {
+#if 0
+		Vector<double> x,y,z;
+		GlobalXYZ::getXYZ(x,y,z);
+		SerialUSB.print("X = ("); SerialUSB.print(x(0)); SerialUSB.print(","); SerialUSB.print(x(1)); SerialUSB.print(","); SerialUSB.print(x(2)); SerialUSB.print(") ");
+		SerialUSB.print("Y = ("); SerialUSB.print(y(0)); SerialUSB.print(","); SerialUSB.print(y(1)); SerialUSB.print(","); SerialUSB.print(y(2)); SerialUSB.print(") ");
+		SerialUSB.print("Z = ("); SerialUSB.print(z(0)); SerialUSB.print(","); SerialUSB.print(z(1)); SerialUSB.print(","); SerialUSB.print(z(2)); SerialUSB.print(")");
+#endif
+#if 1
+		double roll = 0,pitch = 0,yaw = 0;
+		GlobalXYZ::getRPY(roll,pitch,yaw);
+		roll *= 180 / 3.1415926; pitch *= 180 / 3.1415926; yaw *= 180 / 3.1415926;
+		SerialUSB.print("roll = "); SerialUSB.print(roll); SerialUSB.print("\t");
+		SerialUSB.print("pitch = "); SerialUSB.print(pitch); SerialUSB.print("\t");
+		SerialUSB.print("yaw = "); SerialUSB.print(yaw); SerialUSB.print("\t");
+#endif
+#if 0
+		Vector<double> retVal = Accelerometer::getReading();
+		SerialUSB.print("x = "); SerialUSB.print(retVal(0)); 
+		SerialUSB.print("\ty = "); SerialUSB.print(retVal(1)); 
+		SerialUSB.print("\tz = "); SerialUSB.print(retVal(2));
+#endif
+#if 0
+		Vector<double> retVal = Gyroscope::getReading();
+		SerialUSB.print("x = "); SerialUSB.print(retVal(0)); 
+		SerialUSB.print("\ty = "); SerialUSB.print(retVal(1)); 
+		SerialUSB.print("\tz = "); SerialUSB.print(retVal(2));		
+#endif
+#if 0
+		Vector<double> retVal = Compass::getReading();
+		SerialUSB.print("x = "); SerialUSB.print(retVal(0));
+		SerialUSB.print("\ty = "); SerialUSB.print(retVal(1));
+		SerialUSB.print("\tz = "); SerialUSB.print(retVal(2));
+#endif
+#if 0
+		Compass::calibrate();
+#endif
+
+		SerialUSB.println();
+		delay(100);
+    }
     
-    delay(3000);
-
-    unsigned long currentMillis ;
-    previousMillis = millis();
-
-    SerialUSB.print("\n\rPress any key to enter [Test Mode]:  ");
-    
-    while(SerialUSB.available() == 0 && i >= 0)
-    {
-        currentMillis = millis();
-        if(currentMillis - previousMillis > interval)
-        {    
-            // save the last time you blinked the LED 
-            previousMillis = currentMillis;
-            SerialUSB.print(BS);  
-            SerialUSB.print(i, DEC);
-            toggleLED();
-            i--;
-        }
-    }
-
-    if(i <= 0 )
-    {
-        SerialUSB.println("\n\r Entering [Flight Mode]...");
-        flightMode(); //TODO
-        loop();
-    }
-    else SerialUSB.println("\n\r Entering [Test Mode] ...");
-
-    while(1)
-    {
-        do{
-            SerialUSB.read();    
-        }while(SerialUSB.available() != 0);
-
-        toggleLED();
-        delay(1000);
-        
-         /* clear screen for standard PTY terminal  "\033[1H\033[2J " */
-        SerialUSB.println("\33[2J");
-        
-        SerialUSB.println("\n\r >> OpenDrone Flymaple 1.0 << ");
-        SerialUSB.println("---------------------------------");
-        SerialUSB.println("(s) Sensors Test");
-        SerialUSB.println("(m) Motors Test");
-        SerialUSB.println("(r) Remote Control Test");
-        SerialUSB.println("(t) Take Off");
-        SerialUSB.println("(l) Landing");
-        SerialUSB.println("(?) Help - Print this screen");
-        SerialUSB.println("(x) Reset");
-        SerialUSB.println("================================");
-        SerialUSB.print("Choose ( \"?\" for help): ");
-
-        /* Echo Charactor */
-        ch = SerialUSB.read(); 
-        SerialUSB.println(ch);
-        
-        switch(ch)
-        {
-            case 's':  sensorsTest(); break;
-            case 'm':  motorsTest(); break;
-            case 'r':  remoteTest(); break;
-            case 't':  qcTakeOff(); break;
-            case 'l':  qcLanding(); break;
-            case '?':  break;
-            case 'x': loop(); //call itself for resetting
-            default: break;
-        }
-    }
+	SerialUSB.println();
 }
 
 /* Please Do Not Remove & Edit Following Code */

@@ -46,10 +46,12 @@ void GlobalXYZ::getZ(Vector<double> & newZ,Vector<double> & deltaTheta)
 
 void GlobalXYZ::getX(const Vector<double> & newZ,Vector<double> & newX,Vector<double> & deltaTheta)
 {
+	//NOTICE:注意这里的北磁极是正北方向地平线以下的一个点，我们要的正北是与我们脚下地平线相切的方向
 	Vector<double> northMagneticPole = Compass::getReading();
-	Vector<double> north(3);
-	north(0) = northMagneticPole(0); north(1) = northMagneticPole(1);
-	north(2) = - (north(0) * newZ(0) + north(1) * newZ(1)) / newZ(2);
+	Vector<double> north = northMagneticPole;
+	//施密特正交化
+	double offset = inner_prod(newZ,north) / inner_prod(newZ,newZ);
+	north = north - offset * newZ;
 	double modulus = sqrt(north(0) * north(0) + north(1) * north(1) + north(2) * north(2));
 	newX = Vector<double>(3);
 	newX(0) = north(0) / modulus;
@@ -110,7 +112,7 @@ void GlobalXYZ::getXYZ(Vector<double> & retValX,Vector<double> & retValY,Vector<
 	timestamp = micros();
 }
 
-void GlobalXYZ::getRPY(double & roll,double & pitch,double & yaw)
+Matrix<double> GlobalXYZ::getRPY(double & roll,double & pitch,double & yaw)
 {
 	Matrix<double> DCM(3,3);
 	Vector<double> newX,newY,newZ;
@@ -123,4 +125,5 @@ void GlobalXYZ::getRPY(double & roll,double & pitch,double & yaw)
 	roll = -atan2(DCM(2,1),DCM(2,2));
 	pitch = asin(DCM(2,0));
 	yaw = atan2(DCM(1,0),DCM(0,0));
+	return DCM;
 }

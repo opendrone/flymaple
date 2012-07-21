@@ -21,7 +21,7 @@ public:
 	//获得全局坐标系的X,Y,Z的在体坐标系中的向量
 	static void getXYZ(Vector<double> & X,Vector<double> & Y,Vector<double> & Z);
 	//获得飞机的滚动角，俯仰角，偏航角
-	static void getRPY(double & roll,double & pitch,double & yaw);
+	static Matrix<double> getRPY(double & roll,double & pitch,double & yaw);
 };
 
 #endif
