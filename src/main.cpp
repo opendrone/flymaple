@@ -1,16 +1,22 @@
 /**
  * @file   main.cpp
  * @author breadbread1984 <breadbread1984@163.com>
- * @date   Sat Jul 21 22:59:22 2012
+ * @date   Sat Jul 21 15:12:00 2012
  * 
- * @brief  openDrone Quadcopter Main function File
- * @license GPLv3
+ * @section DESCRIPTION 
  * 
+ * openDrone Quadcopter Main function File
+ * 
+ * @section LICENSE
+ * 
+ * GPLv3 
  */
 
 
-#include "main.h"
+#include "wirish.h"
 #include "GlobalXYZ.h"
+
+#define PWM_PIN 2
 
 void setup()
 {

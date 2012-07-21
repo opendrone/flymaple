@@ -1,6 +1,20 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
+/**
+ * @file   Vector.h
+ * @author breadbread1984 <breadbread1984@163.com>
+ * @date   Sat Jul 21 15:12:00 2012
+ * 
+ * @section DESCRIPTION 
+ * 
+ * The Vector template class written for simplify the vector manipulation. 
+ * 
+ * @section LICENSE
+ * 
+ * GPLv3 
+ */
+
 #include "Matrix.h"
 
 template<typename T>
@@ -8,20 +22,68 @@ class Vector {
 	int sz;
 	T * data;
 public:
+	/**
+	 * Default Constructor.
+	 */
 	Vector();
+	/**
+	 * Copy Constructor.
+	 */
 	Vector(const Vector<T> & v);
+	/**
+	 * Constructor.
+	 * 
+	 * @param sz the size of the vector.
+	 */
 	Vector(int sz);
+	/**
+	 * Destructor.
+	 */
 	~Vector();
+	/**
+	 * Get an element from the vector.
+	 * 
+	 * @param i the position of the element.
+	 */
 	T & operator()(int i) const;
+	/**
+	 * Get the size of the vector.
+	 */
 	int size() const;
+	/**
+	 * Assign the value of another vector to the current one.
+	 * 
+	 * @param b the other vector whose value will be copied.
+	 */
 	Vector<T> & operator=(const Vector<T> & b);
 	
+	/**
+	 * The inner product of two vectors.
+	 */
 	template<typename T1,typename T2> friend T1 inner_prod(const Vector<T1> & a,const Vector<T2> & b);
+	/**
+	 * The cross product of two vectors.
+	 */
 	template<typename T1,typename T2> friend Vector<T1> cross_prod(const Vector<T1> & a,const Vector<T2> & b);
+	/**
+	 * The summation of two vectors.
+	 */
 	template<typename T1,typename T2> friend Vector<T1> operator+(const Vector<T1> & a,const Vector<T2> & b);
+	/**
+	 * The difference of two vectors.
+	 */
 	template<typename T1,typename T2> friend Vector<T1> operator-(const Vector<T1> & a,const Vector<T2> & b);
+	/**
+	 * Scale a vector.
+	 */
 	template<typename T1> friend Vector<T1> operator*(const Vector<T1> & a,double s);
+	/**
+	 * Scale a vector.
+	 */
 	template<typename T1> friend Vector<T1> operator*(double s,const Vector<T1> & a);
+	/**
+	 * Scale a vector.
+	 */
 	template<typename T1> friend Vector<T1> operator/(const Vector<T1> & a,double s);
 };
 

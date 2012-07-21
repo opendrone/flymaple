@@ -15,10 +15,6 @@ Sensor::Sensor()
 	i2c_master_enable(I2C1,0);
 }
 
-Sensor::Sensor(const Sensor & sensor)
-{
-}
-
 Sensor::~Sensor()
 {
 }

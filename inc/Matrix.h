@@ -1,6 +1,20 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
+/**
+ * @file   Matrix.h
+ * @author breadbread1984 <breadbread1984@163.com>
+ * @date   Sat Jul 21 15:12:00 2012
+ * 
+ * @section DESCRIPTION 
+ * 
+ * The Matrix template class written for simplify the matrix manipulation. 
+ * 
+ * @section LICENSE
+ * 
+ * GPLv3 
+ */
+
 #include <cassert>
 
 using namespace std;
@@ -10,19 +24,70 @@ class Matrix {
 	int rows,cols;
 	T * data;
 public:
+	/**
+	 * Default constructor.
+	 */
 	Matrix();
+	/**
+	 * Copy constructor.
+	 * 
+	 * @param m the Matrix object to be copied.
+	 */
 	Matrix(const Matrix<T> & m);
+	/**
+	 * Constructor.
+	 * 
+	 * @param rows the row number of the Matrix object.
+	 * @param cols the column number of the Matrix object.
+	 */
 	Matrix(const int rows,const int cols);
+	/**
+	 * Destructor
+	 */
 	~Matrix();
+	/**
+	 * Get element from the matrix.
+	 * 
+	 * @param row the row number of the element.
+	 * @param col the column number of the element.
+	 */
 	T & operator()(int row,int col) const;
+	/**
+	 * Get the row number of the matrix.
+	 */
 	int size1() const;
+	/**
+	 * Get the column number of the matrix.
+	 */
 	int size2() const;
+	/**
+	 * Get the remaining matrix after slicing off a row and a column.
+	 * 
+	 * @param rows the row to be sliced.
+	 * @param cols the column to be sliced.
+	 */
 	Matrix<T> minor(int rows,int cols) const;
+	/**
+	 * Assign the value of another matrix to the current one.
+	 * 
+	 * @param b the other matrix whose value will be copied
+	 */
 	Matrix<T> & operator=(const Matrix<T> & b);
-	
+	/**
+	 * Multiplication of two matrices.
+	 */
 	template<typename N> friend Matrix<N> operator*(const Matrix<N> & a,const Matrix<N> & b);
+	/**
+	 * The inverse of a matrix.
+	 */
 	template<typename N> friend Matrix<N> inv(const Matrix<N> & a);
+	/**
+	 * The transpos of a matrix.
+	 */
 	template<typename N> friend Matrix<N> trans(const Matrix<N> & a);
+	/**
+	 * The determinant of a matrix.
+	 */
 	template<typename N> friend N det(const Matrix<N> & a);
 };
 
