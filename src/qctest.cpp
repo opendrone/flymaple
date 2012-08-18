@@ -35,7 +35,6 @@ void sensorsTest()
 {
     int16 acc[3];
     int16 gyro[4];
-    int16 comp[3];
     
     int16 i = 0;
     int16 temperature = 0;
@@ -66,15 +65,7 @@ void sensorsTest()
         }
 
         SerialUSB.print("|\t");
-        /******** Compass Heading *******
-         for(i = 0; i < 3; i++)
-        {
-            SerialUSB.print(acc[i], DEC);
-            Serial2.print(acc[i], DEC);
-            SerialUSB.print("\t");
-            Serial2.print(",");
-        }
-        /*****************************/
+        
         Heading = compassHeading();
         SerialUSB.print(Heading, DEC);
         SerialUSB.print("|\t");
@@ -255,24 +246,10 @@ void remoteTest()
         displayThrottle(chan4PPM - 1000);
         puts("\r");
         
-        /********* Low Test **************
-        SerialUSB.print("PPM Channel 1: ");
-        SerialUSB.print(chan1PPM, DEC);
-        SerialUSB.print("  ");  
-        SerialUSB.print("PPM Channel 2: ");
-        SerialUSB.print(chan2PPM, DEC);
-        SerialUSB.print("  ");  
-        SerialUSB.print("PPM Channel 3: ");
-        SerialUSB.print(chan3PPM, DEC);
-        SerialUSB.print("  ");  
-        SerialUSB.print("PPM Channel 4: ");
-        SerialUSB.print(chan4PPM, DEC);
-        SerialUSB.println("  ");
-        /*********************************/
-        
+                
          puts("\033[A");puts("\033[A");puts("\033[A");//puts("\033[A");
          
-    }while(chan1PPM & chan2PPM & chan3PPM & chan4PPM != 0);
+    }while((chan1PPM & chan2PPM & chan3PPM & chan4PPM) != 0);
     
     while(!SerialUSB.available()) SerialUSB.print("PPM Error, Press any key to quit.\r");
     

@@ -93,7 +93,7 @@ void loop()
     {
         do{
             SerialUSB.read();    
-        }while(SerialUSB.available() != 0);
+        }while(SerialUSB.available());
                 
         toggleLED();
         delay(1000);

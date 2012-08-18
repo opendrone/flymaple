@@ -67,7 +67,7 @@ void getAccelerometerData(int16 * result) {
 
   //每个轴的读数有10位分辨率，即2个字节.  
   //我们要转换两个bytes为一个int变量
-  result[0] = (((int16)buff[1]) << 8) | buff[0] + a_offset[0];   
-  result[1] = (((int16)buff[3]) << 8) | buff[2] + a_offset[1];
-  result[2] = (((int16)buff[5]) << 8) | buff[4] + a_offset[2];
+  result[0] = (((int16)buff[1]) << 8) | (buff[0] + a_offset[0]);   
+  result[1] = (((int16)buff[3]) << 8) | (buff[2] + a_offset[1]);
+  result[2] = (((int16)buff[5]) << 8) | (buff[4] + a_offset[2]);
 }

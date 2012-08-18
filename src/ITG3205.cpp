@@ -58,7 +58,6 @@ void getGyroscopeData(int16 * result)
      *************************************/
 
     uint8 regAddress = 0x1B;
-    int16 temp, x, y, z;
     uint8 buff[G_TO_READ];
 
     readFrom(GYRO, regAddress, G_TO_READ, buff); //读取陀螺仪ITG3200的数据

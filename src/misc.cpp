@@ -275,7 +275,6 @@ char *puts(const char *s)
  
 char *gets(char *s)
 {
-    int i;
     char c;
     
     while( (c = getchar()) != ENTER)
