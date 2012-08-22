@@ -51,8 +51,15 @@ void setup()
     delay(100);
     
     /* Send a message out the usb virtual serial port  */
-    SerialUSB.println("Hello!");
-    SerialUSB.println("Test1234567890!");
+    Serial2.println("Hello!");
+    Serial2.println("Test1234567890!");
+#if TOPLEVEL
+    while(Serial2.read() != 'ACK')
+    {
+        Serial2.println('REQ');
+    }
+#endif
+    
 }
 
 

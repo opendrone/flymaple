@@ -13,6 +13,11 @@
 
 #include "libmaple_types.h"
 
+#define ACK 0x31
+#define REQ 0x13
+#define NAK 0x44
+#define SOP 0x00
+
 void writeTo(uint8 DEVICE, uint8 address, uint8 val);
 
 void readFrom(uint8 DEVICE, uint8 address, uint8 num, uint8 *msg_data);

@@ -29,7 +29,7 @@
 
 int16 motor[5];
 unsigned long preMillis = 0;
-extern volatile unsigned int chan1PPM;  //PPM捕获值寄存器
+extern volatile unsigned int chan1PPM;  //PPMs' value store
 extern volatile unsigned int chan2PPM;
 extern volatile unsigned int chan3PPM;
 extern volatile unsigned int chan4PPM;
@@ -98,6 +98,8 @@ void flightMode()
  */
 void textFlightMode()
 {
+    char control;
+    Serial
 //TODO
 }
 
@@ -110,5 +112,18 @@ void ppmFlightMode()
     //TODO
 }
 
+/** 
+ * 
+ * 
+ * 
+ * @return 
+ */
+int readSerialUSB()
+{
+//TODO    
+}
 
-
+int readSerial()
+{
+    //TODO
+}

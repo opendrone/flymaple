@@ -14,16 +14,28 @@
 #include "libmaple_types.h"
 
 /** 
- * Motor Struct
+ * Control Struct
  * 
  */
+typedef struct
+{
+    int16 thr;
+    int16 roll;
+    int16 yaw;
+    int16 pitch;
+} val;
 
+typedef enum
+{
+    UP,
+    DOWN
+} Control;
+    
 void flightMode();
-void pitch(int16 val);
-void roll(int16 val);
-void yaw(int16 val);
-void qcThrottle(int16 val);
 void textFlightMode();
 void ppmFlightMode();
+int readSerialUSB();
+int readSerial();
+
 
 #endif
