@@ -99,7 +99,6 @@ void flightMode()
 void textFlightMode()
 {
     char control;
-    Serial
 //TODO
 }
 
