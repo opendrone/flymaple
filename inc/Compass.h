@@ -26,7 +26,7 @@ class Compass {
 	
 	/**
 	 * Constructor initializing the compass.
-	 * To do the initialization for only once, the constructor is hide from developer.
+	 * To do the initialization for only once, the constructor is hiden from developer.
 	 * The only one Compass object is a static one created automatically.
 	 */
 	Compass(unsigned char gain = 5);
