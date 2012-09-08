@@ -1,7 +1,7 @@
 #include "wirish.h"
 #include "Accelerometer.h"
 
-Accelerometer Accelerometer::accelerometer __attribute__((init_priority(3)));
+Accelerometer Accelerometer::accelerometer __attribute__((init_priority(3000)));
 const unsigned char Accelerometer::AccelAddress = 0x53;
 const unsigned char Accelerometer::XL345_DEVID = 0xe5;
 const unsigned char Accelerometer::ADXLREG_BW_RATE = 0x2c;

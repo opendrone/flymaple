@@ -2,7 +2,7 @@
 #include "wirish.h"
 #include "Motor.h"
 
-Motor __attribute__((init_priority(3))) Motor::motors[4] = {Motor(D28),Motor(D27),Motor(D11),Motor(D12)};
+Motor Motor::motors[4] __attribute__((init_priority(3000))) = {Motor(D28),Motor(D27),Motor(D11),Motor(D12)};
 bool Motor::isTimerInit = false;
 
 Motor::Motor(unsigned char p)

@@ -47,7 +47,7 @@ class Pressure {
 	void getRawReading(unsigned int& up,unsigned short& ut);
 	int rawToPressure(unsigned int up);
 	short rawToTemperature(unsigned short ut);
-	int pressureToAltitude(int p);
+	double pressureToAltitude(int p);
 public:
 	/**
 	 * Destructor
@@ -56,7 +56,7 @@ public:
 	/**
 	 * Get the pressure, temperature, altitude (in centimeter) of the quadcopter.
 	 * 
-	 * @return the elements in the returned vector are pressure (of int type), temperature (of short type) and altitude (of int type in centimeter) in sequence.
+	 * @return the elements in the returned vector are pressure (of int type in Pa), temperature (of short type in 0.1 degree C) and altitude (of double type in meters) in sequence.
 	 */
 	static Vector<double> getReading();
 };

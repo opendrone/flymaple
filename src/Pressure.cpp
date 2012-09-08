@@ -1,7 +1,7 @@
 #include "wirish.h"
 #include "Pressure.h"
 
-Pressure Pressure::pressure __attribute__((init_priority(3)));
+Pressure Pressure::pressure __attribute__((init_priority(3000)));
 const unsigned char Pressure::PressureAddress = 0x77;
 const unsigned char Pressure::OSS = 0;
 const unsigned char Pressure::BMP085_CAL_AC[6] = {0xaa,0xac,0xae,0xb0,0xb2,0xb4};
@@ -37,7 +37,7 @@ Vector<double> Pressure::getReading()
 	pressure.getRawReading(up,ut);
 	int pres = pressure.rawToPressure(up);
 	short temp = pressure.rawToTemperature(ut);
-	int altitude = pressure.pressureToAltitude(pres);
+	double altitude = pressure.pressureToAltitude(pres);
 	Vector<double> retVal(3);
 	retVal(0) = pres; retVal(1) = temp; retVal(2) = altitude;
 	return retVal;
@@ -109,8 +109,8 @@ short Pressure::rawToTemperature(unsigned short ut)
     return ((b5 + 8)>>4); 
 }
 
-int Pressure::pressureToAltitude(int pressure)
+double Pressure::pressureToAltitude(int pressure)
 {
-	int centimeters =  (int)(44330 * (1 - pow(((float)pressure / (float)MSLP), 0.1903))) + Altitude_cm_Offset;
-	return centimeters;
+	double meters =  (44330 * (1 - pow(((float)pressure / (float)MSLP), 0.1903))) + Altitude_cm_Offset;
+	return meters;
 }

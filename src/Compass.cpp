@@ -1,7 +1,7 @@
 #include "wirish.h"
 #include "Compass.h"
 
-Compass Compass::compass __attribute__((init_priority(3)));
+Compass Compass::compass __attribute__((init_priority(3000)));
 const unsigned char Compass::CompassAddress = 0x1e;
 const short Compass::sign[3] = {1,1,1};
 const double Compass::scale[3] = {1,1.09,1};

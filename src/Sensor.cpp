@@ -5,7 +5,7 @@
 
 using namespace std;
 
-Sensor Sensor::sensor __attribute__((init_priority(2)));
+Sensor Sensor::sensor __attribute__((init_priority(2000)));
 
 Sensor::Sensor()
 {

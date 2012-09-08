@@ -15,6 +15,7 @@
 
 #include "wirish.h"
 #include "GlobalXYZ.h"
+#include "Pressure.h"
 
 #define PWM_PIN 2
 
@@ -49,6 +50,10 @@ void loop()
 		SerialUSB.print("roll = "); SerialUSB.print(roll); SerialUSB.print("\t");
 		SerialUSB.print("pitch = "); SerialUSB.print(pitch); SerialUSB.print("\t");
 		SerialUSB.print("yaw = "); SerialUSB.print(yaw); SerialUSB.print("\t");
+		Vector<double> pressure = Pressure::getReading();
+		SerialUSB.print("pressure = "); SerialUSB.print(pressure(0)); SerialUSB.print("pa\t");
+		SerialUSB.print("temperature = "); SerialUSB.print(pressure(1) * 0.1); SerialUSB.print("C\t");
+		SerialUSB.print("altitude = "); SerialUSB.print(pressure(2)); SerialUSB.print("m\t");
 #endif
 #if 0
 		Vector<double> retVal = Accelerometer::getReading();

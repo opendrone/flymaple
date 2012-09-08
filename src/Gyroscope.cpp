@@ -1,7 +1,7 @@
 #include "wirish.h"
 #include "Gyroscope.h"
 
-Gyroscope Gyroscope::gyroscope __attribute__((init_priority(3)));
+Gyroscope Gyroscope::gyroscope __attribute__((init_priority(3000)));
 const unsigned char Gyroscope::GyroAddress = 0x68;
 const unsigned char Gyroscope::PWR_MGM = 0x3e;
 const unsigned char Gyroscope::DLPF_FS = 0x16;
