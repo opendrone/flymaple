@@ -1,6 +1,13 @@
 Flymaple History
 ================
 
+2012/9/07  Milestone 0.2
+ - All drivers and sensors test OK
+ - Globle Position code finished (Thanks to Xieyi)
+ - Flight mode began to programming
+ - Test flight mode interface
+ - Top-bottom interfaces has added
+
 2012/6/08  Milestone 0.1
  - Add some docs
  - Motor Control

@@ -45,7 +45,8 @@ val adjVal;
 void flightMode()
 {
     int8 i = 1;
-    unsigned long interval = 1000;
+    /* Delay timer */
+    unsigned long interval = 1000; //1000 = 1 second, 4000 = 4 second
     unsigned long currentMillis ;
 
     preMillis = millis();
@@ -126,9 +127,9 @@ void textControl()
     switch(ctlCh)
     {
     case 'J':
-    case 'j': ctrlVal.thr += 20; break;
+    case 'j': ctrlVal.thr += 50; break;
     case 'K':
-    case 'k': ctrlVal.thr -= 20; break;
+    case 'k': ctrlVal.thr -= 50; break;
     case 'a':
     case 'A': ctrlVal.roll += 20; break;
     case 'd':
