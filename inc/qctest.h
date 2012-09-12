@@ -20,6 +20,8 @@ extern void sensorsTest(void);
 
 extern void motorsTest(void);
 
+void testMode(void);
+
 void remoteTest(void);
 
 void qcTakeOff(void);

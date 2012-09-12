@@ -63,7 +63,10 @@ include $(MAKEDIR)/target-config.mk
 ## Compilation flags
 ##
 
-SPFLAGS	+=	-DCLI #-DPROCESSING
+SPFLAGS	+=	-DCLI \
+		#-DPID \
+		#-DTOPLEVEL \
+		#-DPROCESSING
 GLOBAL_FLAGS    := -D$(VECT_BASE_ADDR)					     \
 		   -DBOARD_$(BOARD) -DMCU_$(MCU)			     \
 		   -DERROR_LED_PORT=$(ERROR_LED_PORT)			     \

@@ -25,17 +25,10 @@ typedef struct
     int16 pitch;
 } val;
 
-typedef enum
-{
-    UP,
-    DOWN
-} Control;
-    
 void flightMode();
-void textFlightMode();
-void ppmFlightMode();
-int readSerialUSB();
-int readSerial();
+void textControl();
+void ppmControl();
+
 
 
 #endif

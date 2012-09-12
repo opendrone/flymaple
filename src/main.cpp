@@ -91,50 +91,12 @@ void loop()
     if(i <= 0 )
     {
         SerialUSB.println("\n\r Entering [Flight Mode]...");
-        flightMode(); //TODO
+        flightMode(); 
         loop();
     }
-    else SerialUSB.println("\n\r Entering [Test Mode] ...");
-
-    while(1)
-    {
-        do{
-            SerialUSB.read();    
-        }while(SerialUSB.available());
-                
-        toggleLED();
-        delay(1000);
-        
-         /* clear screen for standard PTY terminal  "\033[1H\033[2J " */
-        SerialUSB.println("\33[2J");
-        
-        SerialUSB.println("\n\r >> OpenDrone Flymaple 1.1 << ");
-        SerialUSB.println("---------------------------------");
-        SerialUSB.println("(s) Sensors Test");
-        SerialUSB.println("(m) Motors Test");
-        SerialUSB.println("(r) Remote Control Test");
-        SerialUSB.println("(t) Take Off");
-        SerialUSB.println("(l) Landing");
-        SerialUSB.println("(?) Help - Print this screen");
-        SerialUSB.println("(x) Reset");
-        SerialUSB.println("================================");
-        SerialUSB.print("Choose ( \"?\" for help): ");
-
-        /* Echo Charactor */
-        ch = SerialUSB.read(); 
-        SerialUSB.println(ch);
-        
-        switch(ch)
-        {
-            case 's':  sensorsTest(); break;
-            case 'm':  motorsTest(); break;
-            case 'r':  remoteTest(); break;
-            case 't':  qcTakeOff(); break;
-            case 'l':  qcLanding(); break;
-            case '?':  break;
-            case 'x': loop(); //call itself for resetting
-            default: break;
-        }
+    else {
+        SerialUSB.println("\n\r Entering [Test Mode] ...");
+        testMode();
     }
 }
 

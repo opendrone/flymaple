@@ -23,4 +23,7 @@ void motorCustom(int pwm0, int pwm1, int pwm2, int pwm3);
 
 void motorIdle();
 
+int motorLimit(uint16 val);
+
+
 #endif

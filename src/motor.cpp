@@ -8,6 +8,7 @@
  * 
  */
 
+#include "libmaple_types.h"
 #include "motor.h"
 #include "config.h"
 #include "main.h"
@@ -112,6 +113,14 @@ void motorIdle()
     MotorData[3] = IDLE_RPM;
     motorCcontrol(); 
 }
+
+int motorLimit(uint16 val)
+{
+    if(val < IDLE_RPM) motorIdle();
+    else if(val > MAX_RPM) return MAX_RPM;
+    else return val;
+}
+
 
    
 
