@@ -119,10 +119,11 @@ void flightMode()
 void textControl()
 {
     uint8 ctlCh  ;
-    while(!Serial2.available())
-        ctlCh = Serial2.read();
-    while(!SerialUSB.available())
-        ctlCh = SerialUSB.read();
+//    while(!Serial2.available());
+    while(!SerialUSB.available());
+
+    ctlCh = SerialUSB.read();
+//    else ctlCh = Serial2.read();
     
     switch(ctlCh)
     {
@@ -138,16 +139,26 @@ void textControl()
     case 'W': ctrlVal.pitch -= 20; break;
     case 's':
     case 'S': ctrlVal.pitch += 20; break;
+    default: break;
     }
-    
 }
 
+
+/**
+ * Centeral about 500
+ * (D31) CH1 - Yaw: 930 <-> 100
+ * (D32) CH2 - Pitch: pitch forward 100, backward 900
+ * (D33) CH3 - Thruttle 0 <-> 930
+ * (D34) CH4 - Roll 100 <-> 930
+ */
 /** 
  * PPM Flight Mode
  * 
  */
 void ppmControl()
 {
+    
     //TODO
+    return;
 }
 

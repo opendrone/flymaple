@@ -88,6 +88,9 @@ void sensorsTest()
     int32 centimeters = 0;
     float Heading;
 
+    GlobalXYZ xyz;
+	double roll,pitch,yaw;
+    
     SerialUSB.println("\n\rSensors Testing...");
     SerialUSB.println();
 
@@ -141,6 +144,12 @@ void sensorsTest()
         SerialUSB.print(centimeters, DEC);
         SerialUSB.print("\t|\t");
 
+        xyz.getRPY(roll,pitch,yaw);
+		SerialUSB.print("roll = "); SerialUSB.print(roll * 180 / 3.1415926);
+		SerialUSB.print("\tpitch = "); SerialUSB.print(pitch * 180 / 3.1415926);
+		SerialUSB.print("\tyaw = "); SerialUSB.print(yaw * 180 / 3.1415926); SerialUSB.println();
+		delay(50);
+        
         SerialUSB.println();
         Serial2.println();
         
@@ -148,18 +157,7 @@ void sensorsTest()
         
     }
 
-	GlobalXYZ xyz;
-	double roll,pitch,yaw;
-    
-    while(!SerialUSB.available())
-    {
-		xyz.getRPY(roll,pitch,yaw);
-		SerialUSB.print("roll = "); SerialUSB.print(roll * 180 / 3.1415926);
-		SerialUSB.print("\tpitch = "); SerialUSB.print(pitch * 180 / 3.1415926);
-		SerialUSB.print("\tyaw = "); SerialUSB.print(yaw * 180 / 3.1415926); SerialUSB.println();
-		delay(50);
-	}
-    //延时50毫秒
+
     return;
 }
 

@@ -38,7 +38,7 @@ void setup()
     i2c_master_enable(I2C1, 0); //i2c init
     delay(100);
     initAcc();    //Accelerometer Init
-    delay(100);
+    delay(1000);
     initGyro();   //Gyroscope Init
     delay(100);
     bmp085Calibration();
@@ -66,7 +66,6 @@ void setup()
 void loop()
 {
     int i = BOOTDELAY;
-    char ch;
     unsigned long interval = 1000;
     unsigned long currentMillis ;
 
