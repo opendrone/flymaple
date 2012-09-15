@@ -23,7 +23,7 @@ typedef struct
     int16 roll;
     int16 yaw;
     int16 pitch;
-} val;
+} QuadAttitude;
 
 void flightMode();
 void textControl();

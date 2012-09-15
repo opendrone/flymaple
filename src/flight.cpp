@@ -32,15 +32,17 @@
 #include "misc.h"
 #include "GlobalXYZ.h"
 
+#define COE 0.75
+
 int16 motor[5];
 unsigned long preMillis = 0;
 extern volatile unsigned int chan1PPM;  //PPMs' value store
 extern volatile unsigned int chan2PPM;
 extern volatile unsigned int chan3PPM;
 extern volatile unsigned int chan4PPM;
-val ctrlVal;
-val adjVal;
 
+QuadAttitude ctrlVal;
+QuadAttitude  adjVal;
 
 void flightMode()
 {
@@ -71,9 +73,14 @@ void flightMode()
     }
     if(i <= 0 ) SerialUSB.println("\n\r PPM Check Failed!");
 
+    /* Set all channal to none value to safty care */
+    chan1PPM = chan2PPM = chan3PPM = chan4PPM = 0;
+    
     while(1)
     {
-        ppmControl();
+        
+        // ppmControl();
+        SerialUSB.println("Ready to get control charactor: ");
         textControl();
         
 #ifndef PID
@@ -82,19 +89,30 @@ void flightMode()
         adjVal.yaw = ctrlVal.yaw;
         adjVal.pitch = ctrlVal.pitch;
 #endif
-        
+#ifndef NDEBUG
+        SerialUSB.print("THR: "); SerialUSB.println(ctrlVal.thr);
+        SerialUSB.print("ROLL: "); SerialUSB.println(ctrlVal.roll);
+        SerialUSB.print("PITCH: "); SerialUSB.println(ctrlVal.pitch);
+        SerialUSB.print("YAW:"); SerialUSB.println(ctrlVal.yaw);
+#endif
 #ifdef PID
         adjVal.thr = pidAdj(ctrlVal.thr);
         adjVal.roll= pidAdj(ctrlVal.roll);
         adjVal.yaw = pidAdj(ctrlVal.yaw);
         adjVal.pitch = pidAdj(ctrlVal.pitch);
 #endif
-    
+
         motor[1] = motorLimit(adjVal.thr + adjVal.roll - adjVal.pitch + adjVal.yaw);
         motor[2] = motorLimit(adjVal.thr - adjVal.roll - adjVal.pitch - adjVal.yaw);
         motor[3] = motorLimit(adjVal.thr + adjVal.roll + adjVal.pitch - adjVal.yaw);
         motor[4] = motorLimit(adjVal.thr - adjVal.roll + adjVal.pitch + adjVal.yaw);
-        
+
+#ifndef NDEBUG    
+        SerialUSB.print("M1: "); SerialUSB.println(motor[1]);
+        SerialUSB.print("M2: "); SerialUSB.println(motor[2]);
+        SerialUSB.print("M3: "); SerialUSB.println(motor[3]);
+        SerialUSB.print("M4: "); SerialUSB.println(motor[4]);
+#endif
         motorCustom(motor[1], motor[2], motor[3], motor[4]);
     //TODO
     }
@@ -113,12 +131,13 @@ void flightMode()
  * A or a - Roll Left
  * D or d - Roll Right
  * W or w - Pitch Forward
- * S or s - Pitch Backward
+ * X or x - Pitch Backward
  * H or h - Hold Positon
+ * S - All motors stop
  */
 void textControl()
 {
-    uint8 ctlCh  ;
+    char ctlCh = 0 ;
 //    while(!Serial2.available());
     while(!SerialUSB.available());
 
@@ -137,8 +156,13 @@ void textControl()
     case 'D': ctrlVal.roll -= 20; break;
     case 'w':
     case 'W': ctrlVal.pitch -= 20; break;
-    case 's':
-    case 'S': ctrlVal.pitch += 20; break;
+    case 'x':
+    case 'X': ctrlVal.pitch += 20; break;
+    case 'z':
+    case 'Z': ctrlVal.yaw += 50; break;
+    case 'c':
+    case 'C': ctrlVal.yaw -= 50; break;
+    case 'S': motorStop();
     default: break;
     }
 }
@@ -157,6 +181,10 @@ void textControl()
  */
 void ppmControl()
 {
+    ctrlVal.thr = chan3PPM * COE;
+    ctrlVal.roll = chan4PPM * COE;
+    ctrlVal.pitch = chan2PPM * COE;
+    ctrlVal.yaw = chan1PPM * COE;
     
     //TODO
     return;

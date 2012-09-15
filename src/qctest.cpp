@@ -295,9 +295,11 @@ void remoteTest()
          
     }while((chan1PPM & chan2PPM & chan3PPM & chan4PPM) != 0);
     
-    while(!SerialUSB.available()) SerialUSB.print("PPM Error, Press any key to quit.\r");
-    
-    
+    while(!SerialUSB.available()){
+        SerialUSB.println("\n\n\n");
+        SerialUSB.print("PPM Error, Press any key to quit.\r");
+    }
+        
     return;
 }
 
