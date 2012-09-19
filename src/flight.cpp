@@ -32,7 +32,7 @@
 #include "misc.h"
 #include "GlobalXYZ.h"
 
-#define COE 0.75
+#define COE 0.12
 
 int16 motor[5];
 unsigned long preMillis = 0;
@@ -66,6 +66,11 @@ void flightMode()
             preMillis = currentMillis;
             SerialUSB.print("\b");  
             SerialUSB.print(i, DEC);
+#ifdef TOPLEVEL
+
+            Serial2.println('REQ');
+    
+#endif
             toggleLED();
             motorStop();
             i--;
@@ -79,22 +84,18 @@ void flightMode()
     while(1)
     {
         
-        // ppmControl();
-        SerialUSB.println("Ready to get control charactor: ");
+        ppmControl();
+//        SerialUSB.println("Ready to get control charactor: ");
         textControl();
         
 #ifndef PID
-        adjVal.thr = ctrlVal.thr;
-        adjVal.roll= ctrlVal.roll;
-        adjVal.yaw = ctrlVal.yaw;
-        adjVal.pitch = ctrlVal.pitch;
+        adjVal.thr = ctrlVal.thr * COE;
+        adjVal.roll= ctrlVal.roll * COE;
+        adjVal.yaw = ctrlVal.yaw * COE;
+        adjVal.pitch = ctrlVal.pitch * COE;
 #endif
-#ifndef NDEBUG
-        SerialUSB.print("THR: "); SerialUSB.println(ctrlVal.thr);
-        SerialUSB.print("ROLL: "); SerialUSB.println(ctrlVal.roll);
-        SerialUSB.print("PITCH: "); SerialUSB.println(ctrlVal.pitch);
-        SerialUSB.print("YAW:"); SerialUSB.println(ctrlVal.yaw);
-#endif
+
+
 #ifdef PID
         adjVal.thr = pidAdj(ctrlVal.thr);
         adjVal.roll= pidAdj(ctrlVal.roll);
@@ -106,14 +107,20 @@ void flightMode()
         motor[2] = motorLimit(adjVal.thr - adjVal.roll - adjVal.pitch - adjVal.yaw);
         motor[3] = motorLimit(adjVal.thr + adjVal.roll + adjVal.pitch - adjVal.yaw);
         motor[4] = motorLimit(adjVal.thr - adjVal.roll + adjVal.pitch + adjVal.yaw);
-
-#ifndef NDEBUG    
+        motorCustom(motor[1], motor[2], motor[3], motor[4]);
+        
+#if 1
+        SerialUSB.print("THR: "); SerialUSB.print(ctrlVal.thr); SerialUSB.println("    ");
+        SerialUSB.print("ROLL: "); SerialUSB.print(ctrlVal.roll); SerialUSB.println("    ");
+        SerialUSB.print("PITCH: "); SerialUSB.print(ctrlVal.pitch); SerialUSB.println("    ");
+        SerialUSB.print("YAW:"); SerialUSB.print(ctrlVal.yaw); SerialUSB.println("    ");
+        SerialUSB.println();
         SerialUSB.print("M1: "); SerialUSB.println(motor[1]);
         SerialUSB.print("M2: "); SerialUSB.println(motor[2]);
         SerialUSB.print("M3: "); SerialUSB.println(motor[3]);
         SerialUSB.print("M4: "); SerialUSB.println(motor[4]);
+        for(int i = 9; i > 0; i--) puts("\033[A");
 #endif
-        motorCustom(motor[1], motor[2], motor[3], motor[4]);
     //TODO
     }
     
@@ -138,32 +145,58 @@ void flightMode()
 void textControl()
 {
     char ctlCh = 0 ;
-//    while(!Serial2.available());
-    while(!SerialUSB.available());
+    while(SerialUSB.available()){
+        ctlCh = SerialUSB.read();
+        // SerialUSB.print(ctlCh);  //echo input
 
-    ctlCh = SerialUSB.read();
-//    else ctlCh = Serial2.read();
-    
-    switch(ctlCh)
-    {
-    case 'J':
-    case 'j': ctrlVal.thr += 50; break;
-    case 'K':
-    case 'k': ctrlVal.thr -= 50; break;
-    case 'a':
-    case 'A': ctrlVal.roll += 20; break;
-    case 'd':
-    case 'D': ctrlVal.roll -= 20; break;
-    case 'w':
-    case 'W': ctrlVal.pitch -= 20; break;
-    case 'x':
-    case 'X': ctrlVal.pitch += 20; break;
-    case 'z':
-    case 'Z': ctrlVal.yaw += 50; break;
-    case 'c':
-    case 'C': ctrlVal.yaw -= 50; break;
-    case 'S': motorStop();
-    default: break;
+        switch(ctlCh)
+        {
+        case 'J': // Throttle Up
+        case 'j': ctrlVal.thr + 50 > 8500 ? ctrlVal.thr = 8500 : ctrlVal.thr += 50;
+            toggleLED();
+            break; break;
+        case 'K': 
+        case 'k': ctrlVal.thr - 50 < 0 ? ctrlVal.thr = 0 :ctrlVal.thr -= 50;
+                                     toggleLED();
+                                     break; break;
+        case 'a': 
+        case 'A': ctrlVal.roll - 20 < -2000 ? ctrlVal.roll = -2000 : ctrlVal.roll -= 20;
+                                      toggleLED();
+                                      break; break;
+        case 'd':
+        case 'D': ctrlVal.roll + 20 > 2000  ? ctrlVal.roll = 2000 : ctrlVal.roll += 20;
+                                     toggleLED();
+                                     break; break;
+        case 'w':
+        case 'W': ctrlVal.pitch + 20 > 2000 ? ctrlVal.pitch = 2000 : ctrlVal.pitch += 20;
+                                       toggleLED();
+                                       break; break;
+        case 'x':
+        case 'X': ctrlVal.pitch - 20 < -2000 ? ctrlVal.pitch = -2000 : ctrlVal.pitch -= 20;
+                                       toggleLED();
+                                       break; break;
+        case 'z':
+        case 'Z': ctrlVal.yaw + 50 > 2000 ? ctrlVal.yaw = 2000 : ctrlVal.yaw += 50;
+            toggleLED() ;
+            break; break;
+        case 'c':
+        case 'C': ctrlVal.yaw - 50 < -2000 ? ctrlVal.yaw = -2000 : ctrlVal.yaw -= 50;
+            toggleLED();
+            break; break;
+        case 's':
+        case 'S':
+            ctrlVal.roll = 0;
+            ctrlVal.pitch = 0;
+            ctrlVal.yaw = 0;
+            break; break;
+#ifdef TOPLEVEL
+        case 'b':
+        case 'B':
+            parements();
+            break;break;
+#endif
+        default: break; break;
+        }
     }
 }
 
@@ -181,11 +214,12 @@ void textControl()
  */
 void ppmControl()
 {
-    ctrlVal.thr = chan3PPM * COE;
-    ctrlVal.roll = chan4PPM * COE;
-    ctrlVal.pitch = chan2PPM * COE;
-    ctrlVal.yaw = chan1PPM * COE;
-    
+    while(chan1PPM & chan2PPM & chan3PPM & chan4PPM){
+        ctrlVal.thr = chan3PPM - 500;
+        ctrlVal.roll = chan4PPM - 500;
+        ctrlVal.pitch = chan2PPM - 500 ;
+        ctrlVal.yaw = chan1PPM - 500;
+    }
     //TODO
     return;
 }

@@ -53,12 +53,7 @@ void setup()
     /* Send a message out the usb virtual serial port  */
     Serial2.println("Hello!");
     Serial2.println("Test1234567890!");
-#if TOPLEVEL
-    while(Serial2.read() != 'ACK')
-    {
-        Serial2.println('REQ');
-    }
-#endif
+
     
 }
 
@@ -82,6 +77,11 @@ void loop()
             previousMillis = currentMillis;
             SerialUSB.print(BS);  
             SerialUSB.print(i, DEC);
+#ifdef TOPLEVEL
+
+            Serial2.println('REQ');
+    
+#endif
             toggleLED();
             i--;
         }
