@@ -39,8 +39,8 @@ void testMode(void)
         delay(1000);
         
          /* clear screen for standard PTY terminal  "\033[1H\033[2J " */
-        SerialUSB.println("\33[2J");
-        
+        //SerialUSB.println("\33[2J");
+        SerialUSB.println("\n\n\r");
         SerialUSB.println("\n\r >> OpenDrone Flymaple 1.1 << ");
         SerialUSB.println("---------------------------------");
         SerialUSB.println("(s) Sensors Test");
@@ -99,7 +99,7 @@ void sensorsTest()
     {
         getAccelerometerData(acc);
         getGyroscopeData(gyro);
-        
+        xyz.getRPY(roll,pitch,yaw);
         temperature = bmp085GetTemperature(bmp085ReadUT());
         pressure = bmp085GetPressure(bmp085ReadUP());
         centimeters = bmp085GetAltitude(); //获得海拔高度，单位厘米
@@ -108,28 +108,30 @@ void sensorsTest()
         for(i = 0; i < 3; i++)
         {
             SerialUSB.print(acc[i], DEC);
-            Serial2.print(acc[i], DEC);
             SerialUSB.print("\t");
-            Serial2.print(",");
         }
 
         SerialUSB.print("|\t");
-        
+
+        /********* Heading **************/
         Heading = compassHeading();
         SerialUSB.print(Heading, DEC);
         SerialUSB.print("|\t");
-        Serial2.print(",");
         
         /******** Gyroscope **************/
         for(i = 0; i < 3; i++)
         {  
             SerialUSB.print(gyro[i]);
-            Serial2.print(gyro[i]);
-            Serial2.print(",");
             SerialUSB.print("\t");
         }
 
-        SerialUSB.print("|\t");
+        SerialUSB.println();
+
+        /********* Caculated Attitude ********/
+        SerialUSB.print("roll = "); SerialUSB.print(roll * 180 / 3.1415926);
+		SerialUSB.print("\tpitch = "); SerialUSB.print(pitch * 180 / 3.1415926);
+		SerialUSB.print("\tyaw = "); SerialUSB.print(yaw * 180 / 3.1415926);
+        SerialUSB.println();
 
 #ifdef PROCESSING
         /********* Processing *************/
@@ -142,16 +144,9 @@ void sensorsTest()
         SerialUSB.print(pressure, DEC);
         SerialUSB.print("\t|\t");
         SerialUSB.print(centimeters, DEC);
-        SerialUSB.print("\t|\t");
-
-        xyz.getRPY(roll,pitch,yaw);
-		SerialUSB.print("roll = "); SerialUSB.print(roll * 180 / 3.1415926);
-		SerialUSB.print("\tpitch = "); SerialUSB.print(pitch * 180 / 3.1415926);
-		SerialUSB.print("\tyaw = "); SerialUSB.print(yaw * 180 / 3.1415926); SerialUSB.println();
-		delay(50);
-        
         SerialUSB.println();
-        Serial2.println();
+
+        puts("\033[A");puts("\033[A");puts("\033[A");
         
         delay(50);
         
@@ -289,9 +284,8 @@ void remoteTest()
         puts("CH4: ");
         displayThrottle(chan4PPM - 1000);
         puts("\r");
-        
-                
-         puts("\033[A");puts("\033[A");puts("\033[A");//puts("\033[A");
+
+        puts("\033[A");puts("\033[A");puts("\033[A");//puts("\033[A");
          
     }while((chan1PPM & chan2PPM & chan3PPM & chan4PPM) != 0);
     
