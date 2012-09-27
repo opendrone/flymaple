@@ -2,10 +2,10 @@
 #include "wirish.h"
 #include "Motor.h"
 
-Motor Motor::motor1 __attribute__((init_priority(3000)))(D28);
-Motor Motor::motor2 __attribute__((init_priority(3000)))(D27);
-Motor Motor::motor3 __attribute__((init_priority(3000)))(D11);
-Motor Motor::motor4 __attribute__((init_priority(3000)))(D12);
+Motor Motor::motor1(D28);
+Motor Motor::motor2(D27);
+Motor Motor::motor3(D11);
+Motor Motor::motor4(D12);
 
 Motor::Motor(unsigned char p)
 :pin(p),data(0)

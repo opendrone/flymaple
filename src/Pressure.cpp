@@ -1,7 +1,7 @@
 #include "wirish.h"
 #include "Pressure.h"
 
-Pressure Pressure::pressure __attribute__((init_priority(3000)));
+Pressure Pressure::pressure;
 const unsigned char Pressure::PressureAddress = 0x77;
 const unsigned char Pressure::OSS = 0;
 const unsigned char Pressure::BMP085_CAL_AC[6] = {0xaa,0xac,0xae,0xb0,0xb2,0xb4};
@@ -46,7 +46,7 @@ Vector<double> Pressure::getReading()
 short Pressure::read(unsigned char addr)
 {
 	unsigned char buffer[2];
-	Sensor::read(PressureAddress,addr,2,buffer);
+	pressure.read(PressureAddress,addr,2,buffer);
 	return ((((short)buffer[0]) << 8) | buffer[1]);
 }
 
@@ -55,14 +55,14 @@ void Pressure::getRawReading(unsigned int& up,unsigned short& ut)
 	//读气压
 	unsigned char buffer[3];
 	up = 0;
-	Sensor::write(PressureAddress,BMP085_CONTROL,(READ_PRESSURE + (OSS << 6)));
+	pressure.write(PressureAddress,BMP085_CONTROL,(READ_PRESSURE + (OSS << 6)));
 	delay(2 + (3 << OSS));
-	Sensor::read(PressureAddress,BMP085_CONTROL_OUTPUT,3,buffer);
+	pressure.read(PressureAddress,BMP085_CONTROL_OUTPUT,3,buffer);
 	up = (((unsigned int) buffer[0] << 16) | ((unsigned int) buffer[1] << 8) | (unsigned int) buffer[2]) >> (8-OSS);
 	//读温度
-	Sensor::write(PressureAddress,BMP085_CONTROL,READ_TEMPERATURE);
+	pressure.write(PressureAddress,BMP085_CONTROL,READ_TEMPERATURE);
 	delay(5);
-	Sensor::read(PressureAddress,BMP085_CONTROL_OUTPUT,2,buffer);
+	pressure.read(PressureAddress,BMP085_CONTROL_OUTPUT,2,buffer);
 	ut = ((((short)buffer[0]) << 8) | buffer[1]);
 }
 

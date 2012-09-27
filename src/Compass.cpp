@@ -1,7 +1,7 @@
 #include "wirish.h"
 #include "Compass.h"
 
-Compass Compass::compass __attribute__((init_priority(3000)));
+Compass Compass::compass;
 const unsigned char Compass::CompassAddress = 0x1e;
 const short Compass::sign[3] = {1,1,1};
 const double Compass::scale[3] = {1,1.09,1};
@@ -14,16 +14,16 @@ Compass::Compass(unsigned char gain)
 		waitForButtonPress(0);
 	}
 #endif
-	Sensor::write(CompassAddress,0x02,0x00);
-	Sensor::write(CompassAddress,0x01,gain << 5);
-	Sensor::write(CompassAddress,0x00,0x70);			//正常工作模式
+	write(CompassAddress,0x02,0x00);
+	write(CompassAddress,0x01,gain << 5);
+	write(CompassAddress,0x00,0x70);			//正常工作模式
 	delay(100);
 }
 
 void Compass::getRawReading(short& x,short& y,short& z)
 {
 	unsigned char buffer[6];
-	Sensor::read(CompassAddress,0x03,6,buffer);
+	read(CompassAddress,0x03,6,buffer);
     x = (((short)buffer[0]) << 8) | buffer[1];    // X axis
     y = (((short)buffer[4]) << 8) | buffer[5];    // Y axis
     z = (((short)buffer[2]) << 8) | buffer[3];    // Z axis
@@ -59,10 +59,10 @@ void Compass::calibrate(unsigned char gain)
 		maxval = maxx = maxy = maxz = 0;
 		isFirstCalibrate = false;
 	}
-	Sensor::write(CompassAddress,0x00,0x11);				//三轴正极大，获得最大值
-	Sensor::write(CompassAddress,0x01,gain << 5);
+	compass.write(CompassAddress,0x00,0x11);				//三轴正极大，获得最大值
+	compass.write(CompassAddress,0x01,gain << 5);
 	for(int i = 0 ; i < 10 ; i++) {
-		Sensor::write(CompassAddress,0x02,1);
+		compass.write(CompassAddress,0x02,1);
 		delay(100);
 		short x,y,z;
 		compass.getRawReading(x,y,z);
@@ -76,7 +76,7 @@ void Compass::calibrate(unsigned char gain)
 	SerialUSB.print(" scalez = "); SerialUSB.print(maxval / maxz);
 	SerialUSB.println();
 #endif
-	Sensor::write(CompassAddress,0x00,0x70);
-	Sensor::write(CompassAddress,0x02,0);
+	compass.write(CompassAddress,0x00,0x70);
+	compass.write(CompassAddress,0x02,0);
 	delay(100);
 }

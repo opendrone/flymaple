@@ -6,18 +6,15 @@
  * @author	breadbread1984 <breadbread1984@163.com>
  * @date	Fri Sep 7 10:01:00 2012
  * 
- * @section	DESCRIPTION
+ * @brief	The static class for manipulating the pressure sensor.
  * 
- * The static class for manipulating the pressure sensor.
- * 
- * @section LICENSE
- * 
- * GPLv3
+ * @copyright GPLv3
  */
 
 #include "Sensor.h"
 
-class Pressure {
+class Pressure : public Sensor {
+	using Sensor::read;
 	static Pressure pressure;
 	
 	static const unsigned char PressureAddress;

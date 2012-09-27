@@ -6,13 +6,9 @@
  * @author breadbread1984 <breadbread1984@163.com>
  * @date   Sat Jul 21 15:12:00 2012
  * 
- * @section DESCRIPTION 
+ * @brief	The static class for calculating the axes of the global frame represented in the body frame. 
  * 
- * The static class for calculating the axes of the global frame represented in the body frame. 
- * 
- * @section LICENSE
- * 
- * GPLv3 
+ * @copyright GPLv3 
  */
 
 #include "Vector.h"

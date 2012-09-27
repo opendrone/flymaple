@@ -6,13 +6,9 @@
  * @author breadbread1984 <breadbread1984@163.com>
  * @date   Sat Jul 21 15:12:00 2012
  * 
- * @section DESCRIPTION 
+ * @brief	The Vector template class written for simplify the vector manipulation. 
  * 
- * The Vector template class written for simplify the vector manipulation. 
- * 
- * @section LICENSE
- * 
- * GPLv3 
+ * @copyright GPLv3 
  */
 
 #include "Matrix.h"

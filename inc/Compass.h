@@ -6,18 +6,14 @@
  * @author breadbread1984 <breadbread1984@163.com>
  * @date   Sat Jul 21 15:12:00 2012
  * 
- * @section DESCRIPTION 
+ * @brief	The static class for manipulating the compass. 
  * 
- * The static class for manipulating the compass. 
- * 
- * @section LICENSE
- * 
- * GPLv3 
+ * @copyright GPLv3 
  */
 
 #include "Sensor.h"
 
-class Compass {
+class Compass : public Sensor {
 	static Compass compass;
 	
 	static const unsigned char CompassAddress;

@@ -1,7 +1,7 @@
 #include "wirish.h"
 #include "Accelerometer.h"
 
-Accelerometer Accelerometer::accelerometer __attribute__((init_priority(3000)));
+Accelerometer Accelerometer::accelerometer;
 const unsigned char Accelerometer::AccelAddress = 0x53;
 const unsigned char Accelerometer::XL345_DEVID = 0xe5;
 const unsigned char Accelerometer::ADXLREG_BW_RATE = 0x2c;
@@ -18,18 +18,18 @@ short Accelerometer::offset[3] = {0,0,0};
 Accelerometer::Accelerometer()
 {
 	unsigned char buffer[2];
-	Sensor::read(AccelAddress,ADXLREG_DEVID,1,buffer);
+	read(AccelAddress,ADXLREG_DEVID,1,buffer);
 	unsigned char dev_id = buffer[0];
 	if(dev_id != XL345_DEVID) {
 		SerialUSB.println("Error, incorrect xl345 devid!");
 		SerialUSB.println("Halting program, hit reset...");
 		waitForButtonPress(0);
 	}
-	Sensor::write(AccelAddress,ADXLREG_POWER_CTL,0x00);	delay(5);	//清零
-	Sensor::write(AccelAddress,ADXLREG_POWER_CTL,0xff);	delay(5);	//休眠
-	Sensor::write(AccelAddress,ADXLREG_POWER_CTL,0x08); delay(5);	//开启工作
-	Sensor::write(AccelAddress,ADXLREG_DATA_FORMAT,0x08); delay(5);	//全精度获得读数
-	Sensor::write(AccelAddress,ADXLREG_BW_RATE,0x09); delay(5);		//带宽25hz
+	write(AccelAddress,ADXLREG_POWER_CTL,0x00);	delay(5);	//清零
+	write(AccelAddress,ADXLREG_POWER_CTL,0xff);	delay(5);	//休眠
+	write(AccelAddress,ADXLREG_POWER_CTL,0x08); delay(5);	//开启工作
+	write(AccelAddress,ADXLREG_DATA_FORMAT,0x08); delay(5);	//全精度获得读数
+	write(AccelAddress,ADXLREG_BW_RATE,0x09); delay(5);		//带宽25hz
 	
 	//计算误差(静止状态下加速仪应该所有读数是0，如果不为零就是误差)
 	float accumulator[] = {0,0,0};
@@ -49,7 +49,7 @@ Accelerometer::Accelerometer()
 void Accelerometer::getRawReading(short& x,short& y,short& z)
 {
 	unsigned char buffer[6];
-	Sensor::read(AccelAddress,ADXLREG_DATAX0,6,buffer);
+	read(AccelAddress,ADXLREG_DATAX0,6,buffer);
 	x = (((short)buffer[1]) << 8) | buffer[0];    // X axis
 	y = (((short)buffer[3]) << 8) | buffer[2];    // Y axis
     z = (((short)buffer[5]) << 8) | buffer[4];    // Z axis

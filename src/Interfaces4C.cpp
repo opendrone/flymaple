@@ -1,6 +1,7 @@
 #include "Accelerometer.h"
 #include "Compass.h"
 #include "Gyroscope.h"
+#include "Pressure.h"
 #include "GlobalXYZ.h"
 #include "Interfaces4C.h" 
 
@@ -23,6 +24,14 @@ void getReadingFromComp(double * data)
 void getReadingFromGyro(double * data)
 {
 	Vector<double> retVal = Gyroscope::getReading();
+	data[0] = retVal(0);
+	data[1] = retVal(1);
+	data[2] = retVal(2);
+}
+
+void getReadingFromPres(double * data)
+{
+	Vector<double> retVal = Pressure::getReading();
 	data[0] = retVal(0);
 	data[1] = retVal(1);
 	data[2] = retVal(2);

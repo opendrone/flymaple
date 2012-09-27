@@ -8,6 +8,7 @@ extern "C" {
 void getReadingFromAcc(double * data);
 void getReadingFromComp(double * data);
 void getReadingFromGyro(double * data);
+void getReadingFromPres(double * data);
 void getXYZ(double * X,double * Y,double * Z);
 void getRPY(double * roll,double * pitch,double * yaw);
 

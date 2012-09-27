@@ -6,18 +6,14 @@
  * @author breadbread1984 <breadbread1984@163.com>
  * @date   Sat Jul 21 15:12:00 2012
  * 
- * @section DESCRIPTION 
+ * @brief	The static class for manipulating the gyroscope. 
  * 
- * The static class for manipulating the gyroscope. 
- * 
- * @section LICENSE
- * 
- * GPLv3 
+ * @copyright GPLv3 
  */
 
 #include "Sensor.h"
 
-class Gyroscope {
+class Gyroscope : public Sensor {
 	static Gyroscope gyroscope;
 	
 	static const unsigned char GyroAddress;

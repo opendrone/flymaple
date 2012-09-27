@@ -5,14 +5,18 @@
 
 using namespace std;
 
-Sensor Sensor::sensor __attribute__((init_priority(2000)));
+Sensor Sensor::sensor;
+bool Sensor::isInit = false;
 
 Sensor::Sensor()
 {
 	// Force init to be called *first*, i.e. before static object allocation.
 	// Otherwise, statically allocated objects that need libmaple may fail.
-	init();
-	i2c_master_enable(I2C1,0);
+	if(false == isInit) {
+		init();
+		i2c_master_enable(I2C1,0);
+		isInit = true;
+	}
 }
 
 Sensor::~Sensor()
