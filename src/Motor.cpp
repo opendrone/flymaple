@@ -2,17 +2,14 @@
 #include "wirish.h"
 #include "Motor.h"
 
-Motor Motor::motors[4] __attribute__((init_priority(3000))) = {Motor(D28),Motor(D27),Motor(D11),Motor(D12)};
-bool Motor::isTimerInit = false;
+Motor Motor::motor1 __attribute__((init_priority(3000)))(D28);
+Motor Motor::motor2 __attribute__((init_priority(3000)))(D27);
+Motor Motor::motor3 __attribute__((init_priority(3000)))(D11);
+Motor Motor::motor4 __attribute__((init_priority(3000)))(D12);
 
 Motor::Motor(unsigned char p)
 :pin(p),data(0)
 {
-	pinMode(pin,PWM);
-	if(false == isTimerInit) {
-		Timer3.setPeriod(2080);
-		isTimerInit = true;
-	}
 }
 
 Motor::Motor(const Motor & motor)
@@ -34,29 +31,32 @@ void Motor::control(unsigned short level)
 
 void Motor::control1(unsigned short level)
 {
-	motors[0].control(level);
+	motor1.control(level);
 }
 
 void Motor::control2(unsigned short level)
 {
-	motors[1].control(level);
+	motor2.control(level);
 }
 
 void Motor::control3(unsigned short level)
 {
-	motors[2].control(level);
+	motor3.control(level);
 }
 
 void Motor::control4(unsigned short level)
 {
-	motors[3].control(level);
+	motor4.control(level);
 }
 
 Vector<double> Motor::getSpeed()
 {
 	//FIXME:这里返回的还不是角速度，而是控制量
 	Vector<double> retVal(4);
-	for(int i = 0 ; i < 4 ; i++) retVal(i) = motors[i].data;
+	retVal(0) = motor1.data;
+	retVal(1) = motor2.data;
+	retVal(2) = motor3.data;
+	retVal(3) = motor4.data;
 	return retVal;
 }
 

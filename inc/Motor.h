@@ -4,8 +4,7 @@
 #include "Vector.h"
 
 class Motor {
-	static Motor motors[4];
-	static bool isTimerInit;
+	static Motor motor1,motor2,motor3,motor4;
 	
 	unsigned char pin;
 	unsigned short data;

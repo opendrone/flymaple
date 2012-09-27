@@ -31,6 +31,7 @@ SRCS=	Sensor.cpp \
 		Compass.cpp \
 		Gyroscope.cpp \
 		Pressure.cpp \
+		Motor.cpp \
 		GlobalXYZ.cpp \
 		Interfaces4C.cpp \
 		main.cpp    

@@ -30,8 +30,14 @@ void setup()
 
     /* Send a message out USART2  */
     Serial2.begin(9600);
+	
+	/* pin mode setup related to motor should has to be put here*/
+	pinMode(D28,PWM);
+	pinMode(D27,PWM);
+	pinMode(D11,PWM);
+	pinMode(D12,PWM);
+	Timer3.setPeriod(2080);
 }
-
 
 void loop()
 {
