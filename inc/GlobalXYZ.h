@@ -55,6 +55,13 @@ public:
 	 */
 	//获得飞机的滚动角，俯仰角，偏航角
 	static Matrix<double> getRPY(double & roll,double & pitch,double & yaw);
+	/**
+	 * Get the quaternion representation of the rotation
+	 * 
+	 * @return the quaterion vector.
+	 */
+	//获得四元数表示的旋转向量
+	static Vector<double> getQuaternion();
 };
 
 #endif

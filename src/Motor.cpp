@@ -10,6 +10,11 @@ Motor Motor::motor4(D12);
 Motor::Motor(unsigned char p)
 :pin(p),data(0)
 {
+	//原先写在这里的pinMode被移动到setup()函数中
+	control1(0);
+	control2(0);
+	control3(0);
+	control4(0);
 }
 
 Motor::Motor(const Motor & motor)

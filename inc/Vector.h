@@ -52,6 +52,10 @@ public:
 	 * @param b the other vector whose value will be copied.
 	 */
 	Vector<T> & operator=(const Vector<T> & b);
+	/**
+	 * The negative of the vector.
+	 */
+	Vector<T> operator-();
 	
 	/**
 	 * The inner product of two vectors.
@@ -76,11 +80,19 @@ public:
 	/**
 	 * Scale a vector.
 	 */
+	template<typename T1> friend Vector<T1> & operator*=(Vector<T1> & a,double s); 
+	/**
+	 * Scale a vector.
+	 */
 	template<typename T1> friend Vector<T1> operator*(double s,const Vector<T1> & a);
 	/**
 	 * Scale a vector.
 	 */
 	template<typename T1> friend Vector<T1> operator/(const Vector<T1> & a,double s);
+	/**
+	 * Scale a vector.
+	 */
+	template<typename T1> friend Vector<T1> & operator/=(Vector<T1> & a,double s);
 };
 
 template<typename T>
@@ -138,6 +150,14 @@ Vector<T> & Vector<T>::operator=(const Vector<T> & b)
 	if(data) delete[] data;
 	data = tmp;
 	return *this;
+}
+
+template<typename T> 
+Vector<T> Vector<T>::operator-()
+{
+	Vector<T> retVal(sz);
+	for(int i = 0 ; i < sz ; i++) retVal(i) = -data[i];
+	return retVal;
 }
 
 template<typename T1,typename T2>
@@ -204,6 +224,13 @@ Vector<T1> operator*(const Vector<T1> & a,double s)
 }
 
 template<typename T1> 
+Vector<T1> & operator*=(Vector<T1> & a,double s)
+{
+	for(int i = 0 ; i < a.sz ; i++) a(i) *= s;
+	return a;
+}
+
+template<typename T1> 
 Vector<T1> operator*(double s,const Vector<T1> & a)
 {
 	return operator*(a,s);
@@ -215,6 +242,13 @@ Vector<T1> operator/(const Vector<T1> & a,double s)
 	Vector<T1> retVal(a.sz);
 	for(int i = 0 ; i < a.sz ; i++) retVal(i) = a(i) * 1.0 / s;
 	return retVal;
+}
+
+template<typename T1> 
+Vector<T1> & operator/=(Vector<T1> & a,double s)
+{
+	for(int i = 0 ; i < a.sz ; i++) a(i) /= s;
+	return a;
 }
 
 #endif

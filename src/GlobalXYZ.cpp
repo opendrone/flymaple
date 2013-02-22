@@ -127,3 +127,45 @@ Matrix<double> GlobalXYZ::getRPY(double & roll,double & pitch,double & yaw)
 	yaw = atan2(DCM(1,0),DCM(0,0));
 	return DCM;
 }
+
+Vector<double> GlobalXYZ::getQuaternion()
+{
+	Vector<double> quaternion(4);
+	Vector<double> newX,newY,newZ;
+	getXYZ(newX,newY,newZ);
+	Matrix<double> DCM(3,3);
+	//计算体坐标系->全局坐标系的转换矩阵
+	DCM(0,0) = newX(0);	DCM(0,1) = newX(1);	DCM(0,2) = newX(2);
+	DCM(1,0) = newY(0);	DCM(1,1) = newY(1);	DCM(1,2) = newY(2);
+	DCM(2,0) = newZ(0);	DCM(2,1) = newZ(1);	DCM(2,2) = newZ(2);
+	double trace = DCM(0,0) + DCM(1,1) + DCM(2,2);
+	if(trace > 0) {
+		double s = 0.5 / sqrt(trace + 1.0);
+		quaternion(0) = 0.25 / s;
+		quaternion(1) = (DCM(2,1) - DCM(1,2)) * s;
+		quaternion(2) = (DCM(0,2) - DCM(2,0)) * s;
+		quaternion(3) = (DCM(1,0) - DCM(0,1)) * s;
+	} else {
+		if(DCM(0,0) > DCM(1,1) && DCM(0,0) > DCM(2,2)) {
+			double s = 2.0 * sqrt(1.0 + DCM(0,0) - DCM(1,1) - DCM(2,2));
+			quaternion(0) = (DCM(2,1) - DCM(1,2)) / s;
+			quaternion(1) = 0.25 * s;
+			quaternion(2) = (DCM(0,1) + DCM(1,0)) / s;
+			quaternion(3) = (DCM(0,2) + DCM(2,0)) / s;
+		} else if(DCM(1,1) > DCM(2,2)) {
+			double s = 2.0 * sqrt(1.0 + DCM(1,1) - DCM(0,0) - DCM(2,2));
+			quaternion(0) = (DCM(0,2) - DCM(2,0)) / s;
+			quaternion(1) = (DCM(0,1) - DCM(1,0)) / s;
+			quaternion(2) = 0.25 * s;
+			quaternion(3) = (DCM(1,2) + DCM(2,1)) / s;
+		} else {
+			double s = 2.0 * sqrt(1.0 + DCM(2,2) - DCM(0,0) - DCM(1,1));
+			quaternion(0) = (DCM(1,0) - DCM(0,1)) / s;
+			quaternion(1) = (DCM(0,2) + DCM(2,0)) / s;
+			quaternion(2) = (DCM(1,2) + DCM(2,1)) / s;
+			quaternion(3) = 0.25 * s;
+		}
+	}
+	
+	return quaternion;
+}

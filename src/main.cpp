@@ -16,6 +16,7 @@
 #include "wirish.h"
 #include "GlobalXYZ.h"
 #include "Pressure.h"
+#include "Motor.h"
 
 #define PWM_PIN 2
 
@@ -42,6 +43,22 @@ void setup()
 void loop()
 {
 	while(1) {
+#if 1
+		Vector<double> quaternion = GlobalXYZ::getQuaternion();
+		for(int i = 0 ; i < quaternion.size() ; i++) {
+			float n = quaternion(i);
+			unsigned char * ptr = reinterpret_cast<unsigned char*>(&n);
+			for(int i = 0 ; i < sizeof(float) ; i++) {
+				unsigned char b1 = (ptr[i] >> 4) & 0x0f;
+				unsigned char b2 = (ptr[i] & 0x0f);
+				char c1 = (b1 < 10) ? ('0' + b1) : 'A' + b1 - 10;
+				char c2 = (b2 < 10) ? ('0' + b2) : 'A' + b2 - 10;
+				SerialUSB.print(c1);
+				SerialUSB.print(c2);
+			}
+			SerialUSB.print(",");
+		}
+#endif
 #if 0
 		Vector<double> x,y,z;
 		GlobalXYZ::getXYZ(x,y,z);
@@ -49,7 +66,7 @@ void loop()
 		SerialUSB.print("Y = ("); SerialUSB.print(y(0)); SerialUSB.print(","); SerialUSB.print(y(1)); SerialUSB.print(","); SerialUSB.print(y(2)); SerialUSB.print(") ");
 		SerialUSB.print("Z = ("); SerialUSB.print(z(0)); SerialUSB.print(","); SerialUSB.print(z(1)); SerialUSB.print(","); SerialUSB.print(z(2)); SerialUSB.print(")");
 #endif
-#if 1
+#if 0
 		double roll = 0,pitch = 0,yaw = 0;
 		GlobalXYZ::getRPY(roll,pitch,yaw);
 		roll *= 180 / 3.1415926; pitch *= 180 / 3.1415926; yaw *= 180 / 3.1415926;
@@ -60,6 +77,12 @@ void loop()
 		SerialUSB.print("pressure = "); SerialUSB.print(pressure(0)); SerialUSB.print("pa\t");
 		SerialUSB.print("temperature = "); SerialUSB.print(pressure(1) * 0.1); SerialUSB.print("C\t");
 		SerialUSB.print("altitude = "); SerialUSB.print(pressure(2)); SerialUSB.print("m\t");
+		toggleLED();
+		static int level = 0;
+		Motor::control1(500 + (level++) % 500);
+		Motor::control2(500 + (100 + level++) % 500);
+		Motor::control3(500 + (200 + level++) % 500);
+		Motor::control4(500 + (300 + level++) % 500);
 #endif
 #if 0
 		Vector<double> retVal = Accelerometer::getReading();
@@ -82,9 +105,18 @@ void loop()
 #if 0
 		Compass::calibrate();
 #endif
+#if 0
+		static int k = 0;
+		k = (k >= 1000)?1000:k+1;
+		Motor::control1(k);
+		Motor::control2(k);
+		Motor::control3(k);
+		Motor::control4(k);
+		delay(3000);
+#endif
 
 		SerialUSB.println();
-		delay(100);
+		delay(200);
     }
     
 	SerialUSB.println();
