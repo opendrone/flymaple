@@ -13,6 +13,7 @@
 
 #include "Vector.h"
 #include "Sensor.h"
+#include "Kalman.h"
 
 class GlobalXYZ {
 	static GlobalXYZ xyz;
@@ -26,6 +27,7 @@ class GlobalXYZ {
 	static Vector<double> X;
 	static Vector<double> Y;
 	static Vector<double> Z;
+	static Vector<double> northMagneticPole;
 	static unsigned int timestamp;
 	void getZ(Vector<double> & newZ,Vector<double> & deltaTheta);
 	void getX(const Vector<double> & newZ,Vector<double> & newX,Vector<double> & deltaTheta);
@@ -55,6 +57,13 @@ public:
 	 */
 	//获得飞机的滚动角，俯仰角，偏航角
 	static Matrix<double> getRPY(double & roll,double & pitch,double & yaw);
+	/**
+	 * Get the quaternion representation of the rotation
+	 * 
+	 * @return the quaterion vector.
+	 */
+	//获得四元数表示的旋转向量
+	static Vector<double> getQuaternion();
 };
 
 #endif

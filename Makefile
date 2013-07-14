@@ -31,9 +31,11 @@ SRCS=	Sensor.cpp \
 		Compass.cpp \
 		Gyroscope.cpp \
 		Pressure.cpp \
-		Motor.cpp \
 		GlobalXYZ.cpp \
+		Motor.cpp \
+		Kalman.cpp \
 		Interfaces4C.cpp \
+		Test.cpp \
 		main.cpp    
 
 #SRCS = $(wildcard *.cpp) 
