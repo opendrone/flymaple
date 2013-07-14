@@ -34,6 +34,7 @@ SRCS=	Sensor.cpp \
 		Motor.cpp \
 		GlobalXYZ.cpp \
 		Interfaces4C.cpp \
+		Test.cpp \
 		main.cpp    
 
 #SRCS = $(wildcard *.cpp) 

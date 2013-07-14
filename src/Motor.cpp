@@ -2,67 +2,78 @@
 #include "wirish.h"
 #include "Motor.h"
 
-Motor Motor::motor1(D28);
-Motor Motor::motor2(D27);
-Motor Motor::motor3(D11);
-Motor Motor::motor4(D12);
+Motor Motor::motor;
+const unsigned char Motor::pin[4] = {D28,D27,D11,D12};
+unsigned short Motor::data[4];
 
-Motor::Motor(unsigned char p)
-:pin(p),data(0)
+Motor::Motor()
 {
-	//原先写在这里的pinMode被移动到setup()函数中
-	control1(0);
-	control2(0);
-	control3(0);
-	control4(0);
-}
-
-Motor::Motor(const Motor & motor)
-:pin(motor.pin),data(motor.data)
-{
+	/* pin mode setup related to motor should has to be put here*/
+	pinMode(D28,PWM);
+	pinMode(D27,PWM);
+	pinMode(D11,PWM);
+	pinMode(D12,PWM);
+	Timer3.setPeriod(2080);
+	
+	for(int index = 0 ; index < 4 ; index++)
+		control(index,0);
 }
 
 Motor::~Motor()
 {
 }
 
-void Motor::control(unsigned short level)
+void Motor::control(int index,unsigned short level)
 {
 #ifndef NDEBUG
+	assert(0 <= index && index <= 3);
 	assert(0 <= level && level <= 1000);
 #endif
-	pwmWrite(pin,levelToCtrl(level));
+	pwmWrite(pin[index],levelToCtrl(level));
 }
 
 void Motor::control1(unsigned short level)
 {
-	motor1.control(level);
+	motor.control(0,level);
+	data[0] = level;
 }
 
 void Motor::control2(unsigned short level)
 {
-	motor2.control(level);
+	motor.control(1,level);
+	data[1] = level;
 }
 
 void Motor::control3(unsigned short level)
 {
-	motor3.control(level);
+	motor.control(2,level);
+	data[2] = level;
 }
 
 void Motor::control4(unsigned short level)
 {
-	motor4.control(level);
+	motor.control(3,level);
+	data[3] = level;
 }
 
-Vector<double> Motor::getSpeed()
+unsigned short Motor::getLevel1()
 {
-	//FIXME:这里返回的还不是角速度，而是控制量
-	Vector<double> retVal(4);
-	retVal(0) = motor1.data;
-	retVal(1) = motor2.data;
-	retVal(2) = motor3.data;
-	retVal(3) = motor4.data;
-	return retVal;
+	return data[0];
+}
+
+unsigned short Motor::getLevel2()
+{
+	return data[1];
+}
+
+unsigned short Motor::getLevel3()
+{
+	return data[2];
+}
+
+unsigned short Motor::getLevel4()
+{
+	return data[2];
 }
 
 unsigned short Motor::levelToCtrl(unsigned short level)

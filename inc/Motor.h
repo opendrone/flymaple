@@ -4,14 +4,12 @@
 #include "Vector.h"
 
 class Motor {
-	static Motor motor1,motor2,motor3,motor4;
-	
-	unsigned char pin;
-	unsigned short data;
+	static Motor motor;
+	static const unsigned char pin[4];
+	static unsigned short data[4];
   
-	Motor(unsigned char pin);
-	Motor(const Motor & motor);
-	void control(unsigned short level);
+	Motor();
+	void control(int index,unsigned short level);
 	unsigned short levelToCtrl(unsigned short level);
 public:
 	~Motor();
@@ -19,7 +17,10 @@ public:
 	static void control2(unsigned short level);
 	static void control3(unsigned short level);
 	static void control4(unsigned short level);
-	static Vector<double> getSpeed();
+	static unsigned short getLevel1();
+	static unsigned short getLevel2();
+	static unsigned short getLevel3();
+	static unsigned short getLevel4();
 };
 
 #endif
