@@ -33,7 +33,6 @@ SRCS=	Sensor.cpp \
 		Pressure.cpp \
 		GlobalXYZ.cpp \
 		Motor.cpp \
-		Kalman.cpp \
 		Test.cpp \
 		main.cpp    
 
