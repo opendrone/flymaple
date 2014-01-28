@@ -11,8 +11,11 @@
  * @copyright GPLv3 
  */
 
+#include "MapleFreeRTOS.h"
 #include "Vector.h"
 #include "Sensor.h"
+
+#define UPDATE_INTERVAL 100
 
 class GlobalXYZ {
 	static GlobalXYZ xyz;
@@ -26,6 +29,11 @@ class GlobalXYZ {
 	static Vector<double> X;
 	static Vector<double> Y;
 	static Vector<double> Z;
+	static Vector<double> estX;
+	static Vector<double> estY;
+	static Vector<double> estZ;
+	static xSemaphoreHandle mutex;
+	static Vector<double> northMagneticPole;
 	static unsigned int timestamp;
 	void getZ(Vector<double> & newZ,Vector<double> & deltaTheta);
 	void getX(const Vector<double> & newZ,Vector<double> & newX,Vector<double> & deltaTheta);
@@ -44,7 +52,7 @@ public:
 	 * @param Z is the Z axis of the global frame represented in the body frame.
 	 */
 	//获得全局坐标系的X,Y,Z的在体坐标系中的向量
-	static void getXYZ(Vector<double> & X,Vector<double> & Y,Vector<double> & Z);
+	static void getXYZ();
 	/**
 	 * Get the roll, pitch and yaw angle calculated from the axes of the global frame.
 	 * 
@@ -63,5 +71,7 @@ public:
 	//获得四元数表示的旋转向量
 	static Vector<double> getQuaternion();
 };
+
+void vTaskUpdateXYZ(void * pvParameters);
 
 #endif

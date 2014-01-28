@@ -25,7 +25,7 @@ void Test::testOrientationFiltering1()
 			SerialUSB.print(",");
 		}
 		SerialUSB.println();
-		delay(300);
+		vTaskDelay(300);
 	}
 }
 
@@ -44,7 +44,7 @@ void Test::testOrientationFiltering2()
 		SerialUSB.print("altitude = "); SerialUSB.print(pressure(2)); SerialUSB.print("m\t");
 		toggleLED();
 		SerialUSB.println();
-		delay(300);
+		vTaskDelay(300);
 	}
 }
 
@@ -56,7 +56,7 @@ void Test::testAccelerometer()
 		SerialUSB.print("\ty = "); SerialUSB.print(retVal(1)); 
 		SerialUSB.print("\tz = "); SerialUSB.print(retVal(2));
 		SerialUSB.println();
-		delay(300);
+		vTaskDelay(300);
 	}
 }
 
@@ -68,7 +68,7 @@ void Test::testGyroscope()
 		SerialUSB.print("\ty = "); SerialUSB.print(retVal(1)); 
 		SerialUSB.print("\tz = "); SerialUSB.print(retVal(2));		
 		SerialUSB.println();
-		delay(300);
+		vTaskDelay(300);
 	}
 }
 
@@ -80,7 +80,7 @@ void Test::testCompass()
 		SerialUSB.print("\ty = "); SerialUSB.print(retVal(1));
 		SerialUSB.print("\tz = "); SerialUSB.print(retVal(2));
 		SerialUSB.println();
-		delay(300);
+		vTaskDelay(300);
 	}
 }
 
@@ -92,7 +92,7 @@ void Test::testMotor()
 	Motor::control2(0);
 	Motor::control3(0);
 	Motor::control4(0);
-	delay(100);
+	vTaskDelay(100);
     SerialUSB.println("## NOTE: Press 1 ~ 4 to select motor, or Press 'a' for select All motors.");
     SerialUSB.println("##       Press 'j' for increace Motor, Press 'k' for motor Decrease.");
 	SerialUSB.println();
@@ -167,4 +167,36 @@ void Test::displayThrottle(int val)
         else SerialUSB.print("-");
     }
     SerialUSB.print("|<<");
+}
+
+void vTaskTestOrientationFiltering1(void * pvParameters)
+{
+	Test::testOrientationFiltering1();
+}
+
+void vTaskTestOrientationFiltering2(void * pvParameters)
+{
+	Test::testOrientationFiltering2();
+//	SerialUSB.println("hello");
+//	vTaskDelay(900);
+}
+
+void vTaskTestAccelerometer(void * pvParameters)
+{
+	Test::testAccelerometer();
+}
+
+void vTaskTestGyroscope(void * pvParameters)
+{
+	Test::testGyroscope();
+}
+
+void vTaskTestCompass(void * pvParameters)
+{
+	Test::testCompass();
+}
+
+void vTasktestMotor(void * pvParameters)
+{
+	Test::testMotor();
 }

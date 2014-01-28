@@ -13,6 +13,8 @@
 
 #include "Matrix.h"
 
+template<typename T> class Matrix;
+
 template<typename T>
 class Vector {
 	int sz;
@@ -31,7 +33,7 @@ public:
 	 * 
 	 * @param sz the size of the vector.
 	 */
-	Vector(int sz);
+	Vector(int sz,T val = 0);
 	/**
 	 * Destructor.
 	 */
@@ -111,13 +113,15 @@ Vector<T>::Vector(const Vector<T> & v)
 }
 
 template<typename T>
-Vector<T>::Vector(int s)
+Vector<T>::Vector(int s,T val)
 :sz(s)
 {
 #ifndef NDEBUG
 	assert(sz > 0);
 #endif
 	data = new T[sz]();
+	for(int i = 0 ; i < sz ; i++)
+		data[i] = val;
 }
 
 template<typename T>

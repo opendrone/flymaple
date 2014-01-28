@@ -12,8 +12,11 @@
  */
 
 #include <cassert>
+#include "Vector.h"
 
 using namespace std;
+
+template<typename T> class Vector;
 
 template<typename T>
 class Matrix {
@@ -70,9 +73,35 @@ public:
 	 */
 	Matrix<T> & operator=(const Matrix<T> & b);
 	/**
+	 * Generating a identity matrix
+	 */
+	static Matrix<T> eye(int rows,int cols);
+	/**
+	 * Generating a zero matrix
+	 */
+	static Matrix<T> zeros(int rows,int cols); 
+	/**
 	 * Multiplication of two matrices.
 	 */
 	template<typename N> friend Matrix<N> operator*(const Matrix<N> & a,const Matrix<N> & b);
+	/**
+	 * Multiplication of a matrix and a vector
+	 */
+	template<typename N> friend Vector<N> operator*(const Matrix<N> & a,const Vector<N> & b);
+	template<typename N> friend Vector<N> operator*(const Vector<N> & a,const Matrix<N> & b);
+	/**
+	 * Scaling a matrix
+	 */
+	template<typename N> friend Matrix<N> operator*(N a,const Matrix<N> & b);
+	template<typename N> friend Matrix<N> operator*(const Matrix<N> & a,N b);
+	/**
+	 * Plusing two matrices
+	 */
+	template<typename N> friend Matrix<N> operator+(const Matrix<N> & a,const Matrix<N> & b);
+	/**
+	 * Subtracting one matrix from another one
+	 */
+	template<typename N> friend Matrix<N> operator-(const Matrix<N> & a,const Matrix<N> & b);
 	/**
 	 * The inverse of a matrix.
 	 */
@@ -171,6 +200,26 @@ Matrix<T> & Matrix<T>::operator=(const Matrix<T> & b)
 }
 
 template<typename T>
+Matrix<T> Matrix<T>::eye(int rows,int cols)
+{
+	Matrix<T> retVal(rows,cols);
+	for(int h = 0 ; h < rows ; h++)
+		for(int w = 0 ; w < cols ; w++)
+			retVal(h,w) = (h == w)?1:0;
+	return retVal;
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::zeros(int rows,int cols)
+{
+	Matrix<T> retVal(rows,cols);
+	for(int h = 0 ; h < rows ; h++)
+		for(int w = 0 ; w < cols ; w++)
+			retVal(h,w) = 0;
+	return retVal;
+}
+
+template<typename T>
 Matrix<T> operator*(const Matrix<T> & a,const Matrix<T> & b)
 {
 #ifndef NDEBUG
@@ -184,6 +233,75 @@ Matrix<T> operator*(const Matrix<T> & a,const Matrix<T> & b)
 				sum += a(h,i) * b(i,w);
 			retVal(h,w) = sum;
 		}
+	return retVal;
+}
+
+template<typename T>
+Vector<T> operator*(const Matrix<T> & a,const Vector<T> & b)
+{
+#ifndef NDEBUG
+	assert(a.cols == b.size());
+#endif
+	Vector<T> retVal(b.size());
+	for(int h = 0 ; h < a.rows ; h++) {
+		T sum = 0;
+		for(int w = 0 ; w < a.cols ; w++)
+			sum += a(h,w) * b(w);
+		retVal(h) = sum;
+	}
+	return retVal;
+}
+
+template<typename T>
+Vector<T> operator*(const Vector<T> & a,const Matrix<T> & b)
+{
+#ifndef NDEBUG
+	assert(a.size() == b.rows);
+#endif
+	Matrix<T> bt = trans(b);
+	Vector<T> bta = bt * a;
+	return bta;
+}
+
+template<typename T> 
+Matrix<T> operator*(T a,const Matrix<T> & b)
+{
+	Matrix<T> retVal(b.rows,b.cols);
+	for(int h = 0 ; h < b.rows ; h++)
+		for(int w = 0 ; w < b.cols ; w++)
+			retVal(h,w) = a * b(h,w);
+	return retVal;
+}
+
+template<typename T> 
+Matrix<T> operator*(const Matrix<T> & a,T b)
+{
+	return b * a;
+}
+
+template<typename T> 
+Matrix<T> operator+(const Matrix<T> & a,const Matrix<T> & b)
+{
+#ifndef NDEBUG
+	assert(a.cols == b.cols && a.rows == b.rows);
+#endif
+	Matrix<T> retVal = Matrix<T>::zeros(a.rows,a.cols);
+	for(int h = 0 ; h < a.rows ; h++)
+		for(int w = 0 ; w < a.cols ; w++)
+			retVal(h,w) = a(h,w) + b(h,w);
+	return retVal;
+}
+
+template<typename T> 
+Matrix<T> operator-(const Matrix<T> & a,const Matrix<T> & b)
+{
+#ifndef NDEBUG
+	assert(a.cols == b.cols && a.rows == b.rows);
+#endif
+	Matrix<T> retVal = Matrix<T>::zeros(a.rows,b.cols);
+	for(int h = 0 ; h < a.rows ; h++)
+		for(int w = 0 ; w < a.cols ; w++)
+			retVal(h,w) = a(h,w) - b(h,w);
 	return retVal;
 }
 

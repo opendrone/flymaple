@@ -14,9 +14,12 @@
 
 
 #include "wirish.h"
+#include "MapleFreeRTOS.h"
 #include "Test.h"
+#include "GlobalXYZ.h"
 
 #define PWM_PIN 2
+#define STACK_SIZE 200
 
 void setup()
 {
@@ -31,19 +34,14 @@ void setup()
     Serial2.begin(9600);
 }
 
-void loop()
-{
-//	Test::testMotor();
-	Test::testOrientationFiltering2();
-}
-
 /* Please Do Not Remove & Edit Following Code */
 int main(void) {
     setup();
-
-    while (true) {
-        loop();
-    }
+    
+	xTaskCreate(vTaskUpdateXYZ,(const signed char *)"GlobalXYZ",STACK_SIZE,NULL,1,NULL);
+	xTaskCreate(vTaskTestOrientationFiltering2,(const signed char *)"testOrientationFiltering2",STACK_SIZE,NULL,1,NULL);
+	
+	vTaskStartScheduler();
 
     return 0;
 }

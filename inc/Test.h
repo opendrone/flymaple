@@ -12,4 +12,11 @@ public:
 	static void testMotor();
 };
 
+void vTaskTestOrientationFiltering1(void * pvParameters);
+void vTaskTestOrientationFiltering2(void * pvParameters);
+void vTaskTestAccelerometer(void * pvParameters);
+void vTaskTestGyroscope(void * pvParameters);
+void vTaskTestCompass(void * pvParameters);
+void vTasktestMotor(void * pvParameters);
+
 #endif
